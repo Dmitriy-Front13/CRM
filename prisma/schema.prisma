@@ -1,0 +1,67 @@
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model ApprovalRequest {
+  id            Int      @id @default(autoincrement())
+  approver      String
+  leaveRequest  String?
+  status        String
+  comment       String?
+}
+
+model Employee {
+  id                Int      @id @default(autoincrement())
+  fullName          String   @unique
+  roles             Json
+  password          String
+  subdivision       String
+  position          String
+  status            String
+  peoplePartner     String
+  outOfOfficeBalance Int
+  photo             String?
+  leaveRequests     LeaveRequest[]
+  projects          Project[] 
+  }
+
+model LeaveRequest {
+  id               Int      @id @default(autoincrement())
+  employeeId       Int
+  employee         Employee @relation(fields: [employeeId], references: [id])
+  absenceReason    String?
+  startDate        DateTime
+  endDate          DateTime
+  comment          String?
+  status           String
+  name             String
+  reviewerComment  String?
+}
+
+model Project {
+  id              Int      @id @default(autoincrement())
+  projectType     String
+  startDate       DateTime
+  endDate         DateTime?
+  comment         String?
+  status          String
+  projectName     String
+  projectManager  String?
+  employees       Employee[] 
+}
+
+model MessengerMessage {
+  id           BigInt   @id @default(autoincrement())
+  body         String
+  headers      String
+  queueName    String
+  createdAt    DateTime
+  availableAt  DateTime
+  deliveredAt  DateTime?
+}
