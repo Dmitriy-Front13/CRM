@@ -16,9 +16,8 @@ on:
 
 jobs:
   backend:
-    name: Backend CI
+    name: Backend CI/CD
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -36,6 +35,10 @@ jobs:
 
       - name: Build backend
         run: npm run build
+
+      # Вызов Deploy Hook для Render
+      - name: Deploy backend to Render
+        run: curl -X POST ${{ secrets.RENDER_DEPLOY_HOOK }}
 
   frontend:
     name: Frontend CI
