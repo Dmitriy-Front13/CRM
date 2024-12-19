@@ -3,16 +3,28 @@ import { CreateNewButton } from "@/components/ui/create-new-button";
 import { EmployeeFilterMenu } from "@/components/employee/employee-filter-menu";
 import { EmployeesList } from "@/components/employee/employees-list";
 import { useEmployees } from "@/hooks/useEmployees";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 
 export default function EmployeesPage() {
   const router = useRouter();
   const { employees } = useEmployees();
 
-  const [filteredEmployees, setFilteredEmployees] = useState<any[]>(employees);
+  const [filteredEmployees, setFilteredEmployees] = useState<any[]>([]);
   const [sortKey, setSortKey] = useState<string>("");
   const [sortDirection, setSortDirection] = useState<"asc" | "desc">("asc");
+
+  useEffect(() => {
+    if (employees) {
+      const uniqueEmployees = employees
+        .filter((employee) => employee && employee.id) // Проверяем, что элемент определен и содержит id
+        .filter(
+          (employee, index, self) =>
+            self.findIndex((e) => e.id === employee.id) === index
+        );
+      setFilteredEmployees(uniqueEmployees);
+    }
+  }, [employees]);
 
   const handleSort = (key: string) => {
     const direction =
@@ -27,6 +39,7 @@ export default function EmployeesPage() {
     });
     setFilteredEmployees(sortedEmployees);
   };
+
   return (
     <>
       <h2 className="mt-3 mb-4 flex justify-center">Employees</h2>

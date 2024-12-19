@@ -27,17 +27,19 @@ export function EmployeeFilterMenu({
   const HrManagers = useMemo(
     () =>
       renderEmployees
-        .filter((employee) => employee.position === "HR_MANAGER")
-        .map((manager) => manager.fullName),
+        ?.filter((employee) => employee?.position === "HR_MANAGER")
+        .map((manager) => manager.fullName) || [],
     [renderEmployees]
   );
 
   const filterEmployees = () => {
-    let filteredEmployees = [...renderEmployees];
+    let filteredEmployees = [...(renderEmployees || [])];
 
     if (filters.searchTerm) {
       filteredEmployees = filteredEmployees.filter((employee) =>
-        employee.fullName.toLowerCase().includes(filters.searchTerm.toLowerCase())
+        employee.fullName
+          ?.toLowerCase()
+          .includes(filters.searchTerm.toLowerCase())
       );
     }
     if (filters.selectedStatus) {
@@ -78,14 +80,14 @@ export function EmployeeFilterMenu({
   return (
     <>
       <Search
-        listData={renderEmployees}
+        listData={renderEmployees || []}
         searchTerm={filters.searchTerm}
         setSearchTerm={(value) => handleFilterChange("searchTerm", value)}
         className="border border-gray-300 rounded-l-md focus:outline-none focus:ring-2 focus:ring-blue-500"
         placeholder={"Search by Name"}
       />
       <Filter
-        availableOptions={statusChoices}
+        availableOptions={statusChoices || []}
         selectedValue={filters.selectedStatus}
         onChange={(event) =>
           handleFilterChange("selectedStatus", event.target.value)
@@ -93,7 +95,7 @@ export function EmployeeFilterMenu({
         placeholder="All statuses"
       />
       <Filter
-        availableOptions={positions}
+        availableOptions={positions || []}
         selectedValue={filters.selectedPosition}
         onChange={(event) =>
           handleFilterChange("selectedPosition", event.target.value)
@@ -101,7 +103,7 @@ export function EmployeeFilterMenu({
         placeholder="All positions"
       />
       <Filter
-        availableOptions={subdivisions}
+        availableOptions={subdivisions || []}
         selectedValue={filters.selectedSubdivision}
         onChange={(event) =>
           handleFilterChange("selectedSubdivision", event.target.value)
