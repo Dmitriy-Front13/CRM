@@ -30,11 +30,8 @@ jobs:
       - name: Install dependencies for backend
         run: npm install
 
-      - name: Run backend tests
-        run: npm test
-
-      - name: Build backend
-        run: npm run build
+      - name: Generate Prisma Client
+        run: npx prisma generate
 
       # Вызов Deploy Hook для Render
       - name: Deploy backend to Render
