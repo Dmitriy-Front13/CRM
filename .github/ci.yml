@@ -1,0 +1,63 @@
+name: Monorepo CI
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'src/**'         # Запускать, если изменены файлы backend
+      - 'package.json'   # Для изменений в корне
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'src/**'
+      - 'package.json'
+
+jobs:
+  backend:
+    name: Backend CI
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
+
+      - name: Install dependencies for backend
+        run: npm install
+
+      - name: Run backend tests
+        run: npm test
+
+      - name: Build backend
+        run: npm run build
+
+  frontend:
+    name: Frontend CI
+    runs-on: ubuntu-latest
+    if: contains(github.event.head_commit.message, 'frontend') # Условие по сообщению коммита
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
+
+      - name: Install dependencies for frontend
+        working-directory: ./frontend
+        run: npm install
+
+      - name: Run frontend tests
+        working-directory: ./frontend
+        run: npm test
+
+      - name: Build frontend
+        working-directory: ./frontend
+        run: npm run build
