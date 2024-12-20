@@ -6,44 +6,47 @@ import { BackButton } from "../ui/back-button";
 import useEmployeeStore from "@/store/employees";
 import useCommonStore from "@/store/common";
 import { useProjects } from "@/hooks/useProjects";
+import { Employee } from "@prisma/client";
+import { Button } from "../ui/button";
+import Link from "next/link";
+
+type EmployeeWithProjects = Employee & {
+  projects: string[];
+};
 
 interface EmployeeFormProps {
-  employeeId: number | null;
+  employee?: EmployeeWithProjects;
 }
 
-export function EmployeeForm({ employeeId }: EmployeeFormProps) {
+export function EmployeeForm({ employee }: EmployeeFormProps) {
   const [fullName, setFullName] = useState("");
   const [password, setPassword] = useState("");
   const [status, setStatus] = useState("");
-  const [role, setRole] = useState<string[]>([]);
   const [subdivision, setSubdivision] = useState("");
   const [position, setPosition] = useState("");
   const [outOfOfficeBalance, setOutOfOfficeBalance] = useState("");
   const [project, setProject] = useState<string[]>([]);
   const [peoplePartner, setPeoplePartner] = useState("");
+  const [role, setRole] = useState<string[]>([]);
   const [photo, setPhoto] = useState<File | null>(null);
 
-  const { employees, addEmployee, updateEmployee } = useEmployeeStore();
+  const { addEmployee, updateEmployee } = useEmployeeStore();
   const { projects } = useProjects();
   const { positions, subdivisions, roles, statusChoices } = useCommonStore();
   const router = useRouter();
 
   useEffect(() => {
-    if (employeeId) {
-      const employee = employees.find((e) => e.id === employeeId);
-      if (employee) {
-        setFullName(employee.fullName);
-        setPassword(employee.password || "");
-        setStatus(employee.status);
-        setRole(employee.roles);
-        setSubdivision(employee.subdivision);
-        setPosition(employee.position);
-        setOutOfOfficeBalance(employee.outOfOfficeBalance.toString());
-        setProject(employee.projects);
-        setPeoplePartner(employee.peoplePartner);
-      }
+    if (employee) {
+      setFullName(employee.fullName);
+      setPassword(employee.password || "");
+      setStatus(employee.status);
+      setSubdivision(employee.subdivision);
+      setPosition(employee.position);
+      setOutOfOfficeBalance(employee.outOfOfficeBalance.toString());
+      setProject(employee.projects);
+      setPeoplePartner(employee.peoplePartner);
     }
-  }, [employeeId, employees]);
+  }, [employee]);
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -61,8 +64,8 @@ export function EmployeeForm({ employeeId }: EmployeeFormProps) {
     };
 
     try {
-      if (employeeId) {
-        await updateEmployee(employeeId, data);
+      if (employee) {
+        await updateEmployee(employee.id, data);
       } else {
         await addEmployee(data);
       }
@@ -76,11 +79,14 @@ export function EmployeeForm({ employeeId }: EmployeeFormProps) {
     <div className="container mx-auto mt-8 max-w-3xl">
       <div className="border p-6 shadow-lg rounded-lg bg-white">
         <h2 className="text-center text-2xl font-bold mb-6">
-          {employeeId ? "Update Employee" : "Create New Employee"}
+          {employee ? "Update Employee" : "Create New Employee"}
         </h2>
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
-            <label htmlFor="fullName" className="block text-sm font-medium text-gray-700 mb-2">
+            <label
+              htmlFor="fullName"
+              className="block text-sm font-medium text-gray-700 mb-2"
+            >
               Full Name:
             </label>
             <input
@@ -93,7 +99,10 @@ export function EmployeeForm({ employeeId }: EmployeeFormProps) {
             />
           </div>
           <div className="mb-4">
-            <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-2">
+            <label
+              htmlFor="password"
+              className="block text-sm font-medium text-gray-700 mb-2"
+            >
               Password:
             </label>
             <input
@@ -105,7 +114,10 @@ export function EmployeeForm({ employeeId }: EmployeeFormProps) {
             />
           </div>
           <div className="mb-4">
-            <label htmlFor="status" className="block text-sm font-medium text-gray-700 mb-2">
+            <label
+              htmlFor="status"
+              className="block text-sm font-medium text-gray-700 mb-2"
+            >
               Status:
             </label>
             <select
@@ -124,7 +136,10 @@ export function EmployeeForm({ employeeId }: EmployeeFormProps) {
             </select>
           </div>
           <div className="mb-4">
-            <label htmlFor="subdivision" className="block text-sm font-medium text-gray-700 mb-2">
+            <label
+              htmlFor="subdivision"
+              className="block text-sm font-medium text-gray-700 mb-2"
+            >
               Subdivision:
             </label>
             <select
@@ -143,7 +158,10 @@ export function EmployeeForm({ employeeId }: EmployeeFormProps) {
             </select>
           </div>
           <div className="mb-4">
-            <label htmlFor="position" className="block text-sm font-medium text-gray-700 mb-2">
+            <label
+              htmlFor="position"
+              className="block text-sm font-medium text-gray-700 mb-2"
+            >
               Position:
             </label>
             <select
@@ -161,7 +179,10 @@ export function EmployeeForm({ employeeId }: EmployeeFormProps) {
             </select>
           </div>
           <div className="mb-4">
-            <label htmlFor="role" className="block text-sm font-medium text-gray-700 mb-2">
+            <label
+              htmlFor="role"
+              className="block text-sm font-medium text-gray-700 mb-2"
+            >
               Role:
             </label>
             <select
@@ -184,7 +205,10 @@ export function EmployeeForm({ employeeId }: EmployeeFormProps) {
             </select>
           </div>
           <div className="mb-4">
-            <label htmlFor="project" className="block text-sm font-medium text-gray-700 mb-2">
+            <label
+              htmlFor="project"
+              className="block text-sm font-medium text-gray-700 mb-2"
+            >
               Projects:
             </label>
             <select
@@ -207,7 +231,10 @@ export function EmployeeForm({ employeeId }: EmployeeFormProps) {
             </select>
           </div>
           <div className="mb-4">
-            <label htmlFor="outOfOfficeBalance" className="block text-sm font-medium text-gray-700 mb-2">
+            <label
+              htmlFor="outOfOfficeBalance"
+              className="block text-sm font-medium text-gray-700 mb-2"
+            >
               Out of Office Balance:
             </label>
             <input
@@ -220,10 +247,17 @@ export function EmployeeForm({ employeeId }: EmployeeFormProps) {
             />
           </div>
           <div className="flex justify-center mt-6">
-            <SubmitButton id={employeeId!} />
+            <Button
+              type="submit"
+              className="bg-indigo-500 text-white py-2 px-4 rounded-md hover:bg-indigo-600"
+            >
+              {employee ? "Update Employee" : "Create Employee"}
+            </Button>
           </div>
           <div className="flex justify-center mt-4">
-            <BackButton onClick={() => router.push("/employees")} />
+            <Link href="/employees" className="btn-secondary">
+              Back
+            </Link>
           </div>
         </form>
       </div>

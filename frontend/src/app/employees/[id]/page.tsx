@@ -1,20 +1,13 @@
-"use client";
-import { useParams } from "next/navigation";
 import { EmployeeForm } from "@/components/employee/employee-form";
-import { useEmployees } from "@/hooks/useEmployees";
+import { getEmployeeById } from "@/services/employees";
 
-export default function EditEmployeePage() {
-  const { id } = useParams();
-  const { employees } = useEmployees();
-  const employee = employees.find((e) => e.id === parseInt(id as string, 10));
 
-  if (!employee) {
-    return <div>Employee not found</div>;
-  }
-
+export default async function EditEmployeePage({ params }: { params: Promise<{ id: string }> }) {
+  const employeeId = (await params).id;
+  const employee = await getEmployeeById(Number(employeeId));
   return (
     <div className="container mx-auto">
-      <EmployeeForm employeeId={employee.id} />
+      <EmployeeForm employee={employee} />
     </div>
   );
 }

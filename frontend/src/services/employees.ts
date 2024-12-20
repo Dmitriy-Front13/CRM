@@ -3,6 +3,9 @@ import { axiosInstance, getCsrfToken } from './instance';
 export const getAllEmployees = async () => {
   return (await axiosInstance.get("/employees")).data
 }
+export const getEmployeeById = async (id: number) => {
+  return (await axiosInstance.get(`/employees/${id}`)).data
+}
 
 export const createEmployee = async (data: any) => {
   const csrfToken = await getCsrfToken();
@@ -39,3 +42,4 @@ export const deleteEmployee = async (id: number) => {
     },
   });
 };
+
