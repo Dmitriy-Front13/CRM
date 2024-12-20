@@ -4,7 +4,7 @@ import useProjectStore from "../store/projects";
 type ReturnProps = {
   projects: any[];
   fetchProjects: () => Promise<void>;
-  addEmployee: (employeeData: any) => Promise<void>;
+  addProject: (employeeData: any) => Promise<void>;
   updateProject: (id: number, employeeData: any) => Promise<void>;
   deleteProject: (id: number) => Promise<void>;
 };
