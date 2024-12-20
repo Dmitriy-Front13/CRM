@@ -35,13 +35,27 @@ export const getAllEmployees = async (req, res) => {
 export const getEmployeeById = async (req, res) => {
   try {
     const { id } = req.params;
-    const employee = await prisma.employee.findUnique({ where: { id: Number(id) } });
+    const employee = await prisma.employee.findUnique({
+      where: { id: Number(id) },
+      include: {
+        projects: {
+          select: {
+            projectName: true
+          }
+        }
+      }
+    });
 
     if (!employee) {
       return res.status(404).json({ message: 'Employee not found' });
     }
 
-    res.json(employee);
+    const simplifiedEmployee = {
+      ...employee,
+      projects: employee.projects.map(project => project.projectName)
+    };
+
+    res.json(simplifiedEmployee);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
