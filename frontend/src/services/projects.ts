@@ -1,9 +1,10 @@
 import { axiosInstance, getCsrfToken } from './instance';
-export const getAllProjects = async () => {
-  return (await axiosInstance.get("/project")).data;
+import { Project } from '@shared/types';
+export const getAllProjects = async (): Promise<Project[]> => {
+  return (await axiosInstance.get<Project[]>("/project")).data;
 }
 
-export const createProject = async (data: any) => {
+export const createProject = async (data: Project) => {
   const csrfToken = await getCsrfToken();
   await axiosInstance.post("/project", {
     headers: {
@@ -15,7 +16,7 @@ export const createProject = async (data: any) => {
   );
 }
 
-export const updateProject = async (id: number, data: any) => {
+export const updateProject = async (id: number, data: Project) => {
   const csrfToken = await getCsrfToken();
   const response = await axiosInstance.put(`/project/${id}`, {
     headers: {
