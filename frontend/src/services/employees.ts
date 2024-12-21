@@ -1,3 +1,4 @@
+import { EmployeeFormValues } from '@/components/employee/employee-form';
 import { axiosInstance, getCsrfToken } from './instance';
 
 export const getAllEmployees = async () => {
@@ -7,21 +8,26 @@ export const getEmployeeById = async (id: number) => {
   return (await axiosInstance.get(`/employees/${id}`)).data
 }
 
-export const createEmployee = async (data: any) => {
-  const csrfToken = await getCsrfToken();
-  await axiosInstance.post(
-    "/employees",
-    data,
-    {
-      headers: {
-        "Content-Type": "application/json",
-        "X-CSRF-Token": csrfToken,
+export const createEmployee = async (data: EmployeeFormValues) => {
+  try {
+    const csrfToken = await getCsrfToken();
+    await axiosInstance.post(
+      "/employees",
+      data,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          "X-CSRF-Token": csrfToken,
+        },
       },
-    },
-  );
+    );
+  } catch (error) {
+    throw error;
+  }
+
 }
 
-export const updateEmployee = async (id: number, data: any) => {
+export const updateEmployee = async (id: number, data: EmployeeFormValues) => {
   const csrfToken = await getCsrfToken();
   const response = await axiosInstance.put(`/employees/${id}`, data,{
    
