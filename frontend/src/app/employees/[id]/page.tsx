@@ -14,7 +14,7 @@ export default async function EditEmployeePage({ params }: { params: Promise<{ i
       getAllProjects()
     ]);
   return (
-    <div className="container mx-auto">
+    <div className="container mx-auto py-10 px-4">
       <EmployeeForm employee={employee} employeeInfo={{ statuses, positions, subdivisions, projects }}/>
     </div>
   );
