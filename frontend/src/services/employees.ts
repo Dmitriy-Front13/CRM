@@ -8,17 +8,22 @@ export const getEmployeeById = async (id: number) => {
 }
 
 export const createEmployee = async (data: any) => {
-  const csrfToken = await getCsrfToken();
-  await axiosInstance.post(
-    "/employees",
-    data,
-    {
-      headers: {
-        "Content-Type": "application/json",
-        "X-CSRF-Token": csrfToken,
+  try {
+    const csrfToken = await getCsrfToken();
+    await axiosInstance.post(
+      "/employees",
+      data,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          "X-CSRF-Token": csrfToken,
+        },
       },
-    },
-  );
+    );
+  } catch (error) {
+    throw error;
+  }
+
 }
 
 export const updateEmployee = async (id: number, data: any) => {
