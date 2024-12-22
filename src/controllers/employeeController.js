@@ -171,6 +171,22 @@ export const deleteEmployee = async (req, res) => {
   }
 };
 
+export const getPeoplePartners = async (req, res) => {
+  try {
+    const hrManagers = await prisma.employee.findMany({
+        where: {
+            position: 'HR_MANAGER' // Фильтрация по позиции
+        },
+        select: {
+            fullName: true // Только поле fullName
+        }
+    });
+    res.status(200).json(hrManagers);
+} catch (error) {
+    console.error('Error fetching HR managers:', error);
+    res.status(500).json({ error: 'Internal server error' });
+}
+};
 
 export const getActiveEmployees = async (req, res) => {
   try {
