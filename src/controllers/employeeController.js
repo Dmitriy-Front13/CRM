@@ -66,7 +66,6 @@ export const createEmployee = async (req, res) => {
   try {
     const { 
       fullName, 
-      roles, 
       password, 
       subdivision, 
       position, 
@@ -95,7 +94,6 @@ export const createEmployee = async (req, res) => {
     const newEmployee = await prisma.employee.create({
       data: {
         fullName,
-        roles,
         password,
         subdivision,
         position,

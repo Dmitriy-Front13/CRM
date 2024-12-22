@@ -6,9 +6,6 @@ export const employeeValidationRules = [
     .withMessage('Full name is required')
     .isString()
     .withMessage('Full name must be a string'),
-  body('roles')
-    .isArray()
-    .withMessage('Roles must be an array'),
   body('password')
     .isLength({ min: 6 })
     .withMessage('Password must be at least 6 characters long'),
