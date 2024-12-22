@@ -97,10 +97,11 @@ export function EmployeeForm({ employee, employeeInfo }: EmployeeFormProps) {
     try {
       setIsLoading(true);
       setError(null)
-      employee
-        ? await updateEmployee(employee.id, data)
-        : await createEmployee(data);
-      setIsLoading(false);
+      if (employee) {
+        await updateEmployee(employee.id, data);
+      } else {
+        await createEmployee(data);
+      }
       router.push("/employees");
     } catch (error) {
       if (error instanceof Error) {
