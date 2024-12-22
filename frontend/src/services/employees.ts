@@ -28,16 +28,20 @@ export const createEmployee = async (data: EmployeeFormValues) => {
 }
 
 export const updateEmployee = async (id: number, data: EmployeeFormValues) => {
-  const csrfToken = await getCsrfToken();
-  const response = await axiosInstance.put(`/employees/${id}`, data,{
-   
-    headers: {
-      "Content-Type": "application/json",
-      "X-CSRF-Token": csrfToken
-    },
+  try {
+    const csrfToken = await getCsrfToken();
+    const response = await axiosInstance.put(`/employees/${id}`, data, {
+
+      headers: {
+        "Content-Type": "application/json",
+        "X-CSRF-Token": csrfToken
+      },
+    }
+    );
+    return response.data
+  } catch (error) {
+    throw error;
   }
-  );
-  return response.data
 }
 export const deleteEmployee = async (id: number) => {
   const csrfToken = await getCsrfToken();
@@ -48,4 +52,8 @@ export const deleteEmployee = async (id: number) => {
     },
   });
 };
+
+export const getPeoplePartners = async (): Promise<{ fullName: string}[]> => {
+  return (await axiosInstance.get<{ fullName: string}[]>("/employees/partners")).data
+}
 

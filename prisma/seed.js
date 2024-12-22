@@ -22,7 +22,6 @@ async function main() {
     data: [
       {
         fullName: 'John Doe',
-        roles: ['ROLE_USER'],
         password: 'securepassword',
         subdivision: 'IT',
         position: 'Developer',
@@ -32,7 +31,6 @@ async function main() {
       },
       {
         fullName: 'Alice Johnson',
-        roles: ['ROLE_ADMIN'],
         password: 'securepassword',
         subdivision: 'HR',
         position: 'HR_MANAGER',
