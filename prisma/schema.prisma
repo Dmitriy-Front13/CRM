@@ -16,14 +16,18 @@ model ApprovalRequest {
   comment       String?
 }
 
+enum EmployeeStatus {
+    Active
+    Inactive
+}
+
 model Employee {
   id                Int      @id @default(autoincrement())
   fullName          String   @unique
-  roles             Json
   password          String
   subdivision       String
   position          String
-  status            String
+  status            EmployeeStatus
   peoplePartner     String
   outOfOfficeBalance Int
   photo             String?
