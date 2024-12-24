@@ -1,1 +1,1 @@
-export type { Employee, Project, LeaveRequest } from "@prisma/client";
+export type { Employee, Project, LeaveRequest } from "./prisma-types" 
