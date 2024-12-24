@@ -102,7 +102,9 @@ export const columns: ColumnDef<Employee>[] = [
             <DropdownMenuItem>
               <Link href={`/employees/${employeeId}`} className="w-full">Edit</Link>
             </DropdownMenuItem>
-            <DropdownMenuItem className="text-red-600">Delete</DropdownMenuItem>
+            <DropdownMenuItem >
+              <Button className="text-red-600 w-full">Delete</Button>
+              </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       );
