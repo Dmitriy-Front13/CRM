@@ -24,9 +24,8 @@ import {
 
 import { EmployeeFilters } from "./employee-filters";
 import { updateEmployee } from "@/services/employees";
-import { EmployeeWithProjects } from "./employee-form";
 
-
+// @ts-ignore
 declare module '@tanstack/react-table' {
   interface TableMeta<TData extends RowData> {
     updateData: (rowIndex: number, columnId: string, value: unknown) => void
@@ -68,6 +67,7 @@ export function EmployeeTable<TData, TValue>({
     meta: {
       updateData: async (rowIndex: number, columnId: string, value: unknown) => {
         const oldData = [...data];
+        // @ts-ignore
         const currentEmployee = { ...data[rowIndex] as any };
         const updatedEmployee = {
           ...currentEmployee,
