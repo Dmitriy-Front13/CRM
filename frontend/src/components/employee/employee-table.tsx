@@ -10,6 +10,7 @@ import {
   getFilteredRowModel,
   getSortedRowModel,
   useReactTable,
+  RowData
 } from "@tanstack/react-table";
 
 import {
@@ -22,7 +23,14 @@ import {
 } from "@/components/ui/table";
 
 import { EmployeeFilters } from "./employee-filters";
+import { updateEmployee } from "@/services/employees";
 
+
+declare module '@tanstack/react-table' {
+  interface TableMeta<TData extends RowData> {
+    updateData: (rowIndex: number, columnId: string, value: unknown) => void
+  }
+}
 export interface FilterOptions {
   statuses: string[];
   positions: string[];
@@ -36,9 +44,10 @@ interface DataTableProps<TData, TValue> {
 
 export function EmployeeTable<TData, TValue>({
   columns,
-  data,
+  data: initialData,
   filterOptions,
 }: DataTableProps<TData, TValue>) {
+  const [data, setData] = useState(initialData);
   const [sorting, setSorting] = useState<SortingState>([
     { id: "id", desc: false },
   ]);
@@ -55,6 +64,25 @@ export function EmployeeTable<TData, TValue>({
       sorting,
       columnFilters,
     },
+    meta: {
+      updateData: async (rowIndex: number, columnId: string, value: unknown) => {
+        const oldData = [...data];
+        const currentEmployee = { ...data[rowIndex] as any };
+        const updatedEmployee = {
+          ...currentEmployee,
+          [columnId]: value
+        };
+        setData(old =>
+          old.map((row, index) => index === rowIndex ? updatedEmployee : row)
+        );
+        try {
+          await updateEmployee(updatedEmployee.id, updatedEmployee);
+        } catch (error) {
+          setData(oldData);
+          console.error('Error updating employee:', error);
+        }
+      },
+    },  
   });
 
   return (
