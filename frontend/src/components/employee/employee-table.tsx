@@ -25,8 +25,8 @@ import {
 import { EmployeeFilters } from "./employee-filters";
 import { updateEmployee } from "@/services/employees";
 
-// @ts-ignore
 declare module '@tanstack/react-table' {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   interface TableMeta<TData extends RowData> {
     updateData: (rowIndex: number, columnId: string, value: unknown) => void
   }
@@ -67,8 +67,7 @@ export function EmployeeTable<TData, TValue>({
     meta: {
       updateData: async (rowIndex: number, columnId: string, value: unknown) => {
         const oldData = [...data];
-        // @ts-ignore
-        const currentEmployee = { ...data[rowIndex] as any };
+        const currentEmployee = { ...data[rowIndex] as any }; // eslint-disable-line @typescript-eslint/no-explicit-any
         const updatedEmployee = {
           ...currentEmployee,
           [columnId]: value 
