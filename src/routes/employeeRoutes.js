@@ -11,11 +11,10 @@ import {
   getActiveEmployees,
   getEmployeesBySubdivision,
   getEmployeeByFullName,
-  getEmployeesByPosition
+  getPeoplePartners,
 } from '../controllers/employeeController.js';
 import {
   POSITIONS,
-  ROLES,
   SUBDIVISIONS,
 } from '../config/constants.js';
 
@@ -82,12 +81,10 @@ router.get('/active', getActiveEmployees);
 router.get('/positions', (req, res) => {
   res.json(POSITIONS);
 });
-router.get('/roles', (req, res) => {
-  res.json(ROLES);
-});
 router.get('/subdivisions', (req, res) => {
   res.json(SUBDIVISIONS);
 });
+router.get('/partners', getPeoplePartners)
 /**
  * @swagger
  * /employees/subdivision/{subdivision}:

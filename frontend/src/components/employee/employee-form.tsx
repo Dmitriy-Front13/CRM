@@ -33,6 +33,8 @@ import {
 } from "../ui/form";
 import { Positions, StatusChoice, Subdivisions } from "@/services/common";
 import { Checkbox } from "@/components/ui/checkbox";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
+import { AlertCircle } from 'lucide-react'
 
 import { Employee, Project } from "@shared/types";
 import { createEmployee, updateEmployee } from "@/services/employees";
@@ -45,16 +47,18 @@ const formSchema = z.object({
   password: z.string().min(6, {
     message: "Password must be at least 6 characters.",
   }),
+  status: z.enum(["Active", "Inactive"]),
   subdivision: z.string(),
   position: z.string(),
   projects: z.array(z.string()).min(1, {
     message: "Please select at least one project.",
   }),
   outOfOfficeBalance: z.number().min(0),
+  peoplePartner: z.string(),
 });
 export type EmployeeFormValues = z.infer<typeof formSchema>;
 
-type EmployeeWithProjects = Employee & {
+export interface EmployeeWithProjects extends Employee {
   projects: string[];
 };
 type EmployeeInfo = {
@@ -62,6 +66,7 @@ type EmployeeInfo = {
   positions: Positions;
   subdivisions: Subdivisions;
   projects: Project[];
+  partners: {fullName: string}[];
 };
 interface EmployeeFormProps {
   employee?: EmployeeWithProjects;
@@ -69,9 +74,9 @@ interface EmployeeFormProps {
 }
 
 export function EmployeeForm({ employee, employeeInfo }: EmployeeFormProps) {
-  const { positions, subdivisions, projects } = employeeInfo;
+  const { positions, subdivisions, projects, partners } = employeeInfo;
   const [isLoading, setIsLoading] = useState(false);
-  const [isError, setIsError] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const initialData = {
     fullName: employee?.fullName || "",
     password: employee?.password || "",
@@ -80,6 +85,7 @@ export function EmployeeForm({ employee, employeeInfo }: EmployeeFormProps) {
     position: employee?.position || "",
     projects: employee?.projects || [],
     outOfOfficeBalance: employee?.outOfOfficeBalance || 0,
+    peoplePartner: employee?.peoplePartner || "",
   };
   const form = useForm({
     resolver: zodResolver(formSchema),
@@ -90,14 +96,19 @@ export function EmployeeForm({ employee, employeeInfo }: EmployeeFormProps) {
   const onSubmit = async (data: EmployeeFormValues) => {
     try {
       setIsLoading(true);
-      employee
-        ? await updateEmployee(employee.id, data)
-        : await createEmployee(data);
-      setIsLoading(false);
+      setError(null)
+      if (employee) {
+        await updateEmployee(employee.id, data);
+      } else {
+        await createEmployee(data);
+      }
       router.push("/employees");
     } catch (error) {
-      console.log(error);
-      setIsError(true);
+      if (error instanceof Error) {
+        setError(error.message);
+    } else {
+        setError("An unexpected error occurred. Please try again.");
+    }
     } finally {
       setIsLoading(false);
     }
@@ -108,10 +119,17 @@ export function EmployeeForm({ employee, employeeInfo }: EmployeeFormProps) {
         <Card className="w-full max-w-4xl mx-auto">
           <CardHeader>
             <CardTitle className="text-2xl font-bold">
-              {initialData ? "Edit Employee" : "Create New Employee"}
+              {employee ? "Edit Employee" : "Create New Employee"}
             </CardTitle>
           </CardHeader>
           <CardContent>
+          {error && (
+              <Alert variant="destructive" className="mb-6">
+                <AlertCircle className="h-4 w-4" />
+                <AlertTitle>Error</AlertTitle>
+                <AlertDescription>{error}</AlertDescription>
+              </Alert>
+            )}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="space-y-6">
                 <FormField
@@ -241,7 +259,7 @@ export function EmployeeForm({ employee, employeeInfo }: EmployeeFormProps) {
               </div>
             </div>
             <Separator className="my-6" />
-            <div>
+            <div className="space-y-6">
               <FormField
                 control={form.control}
                 name="projects"
@@ -286,6 +304,30 @@ export function EmployeeForm({ employee, employeeInfo }: EmployeeFormProps) {
                         />
                       ))}
                     </div>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="peoplePartner"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>People Partner</FormLabel>
+                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select a People Partner" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        {partners.map((partner) => (
+                          <SelectItem key={partner.fullName} value={partner.fullName}>
+                            {partner.fullName}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
                     <FormMessage />
                   </FormItem>
                 )}
