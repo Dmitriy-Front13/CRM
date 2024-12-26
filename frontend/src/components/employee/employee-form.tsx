@@ -58,7 +58,7 @@ const formSchema = z.object({
 });
 export type EmployeeFormValues = z.infer<typeof formSchema>;
 
-type EmployeeWithProjects = Employee & {
+export interface EmployeeWithProjects extends Employee {
   projects: string[];
 };
 type EmployeeInfo = {
@@ -97,10 +97,11 @@ export function EmployeeForm({ employee, employeeInfo }: EmployeeFormProps) {
     try {
       setIsLoading(true);
       setError(null)
-      employee
-        ? await updateEmployee(employee.id, data)
-        : await createEmployee(data);
-      setIsLoading(false);
+      if (employee) {
+        await updateEmployee(employee.id, data);
+      } else {
+        await createEmployee(data);
+      }
       router.push("/employees");
     } catch (error) {
       if (error instanceof Error) {

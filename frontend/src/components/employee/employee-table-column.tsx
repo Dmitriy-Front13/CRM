@@ -89,8 +89,9 @@ export const columns: ColumnDef<Employee>[] = [
   },
   {
     id: "actions",
-    cell: ({ row }) => {
+    cell: ({ row, table }) => {
       const employeeId = row.original.id;
+      const employeeStatus = row.original.status;
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -100,9 +101,24 @@ export const columns: ColumnDef<Employee>[] = [
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownMenuItem>
-              <Link href={`/employees/${employeeId}`} className="w-full">Edit</Link>
+              <Link href={`/employees/${employeeId}`} className="w-full">
+                Edit
+              </Link>
             </DropdownMenuItem>
-            <DropdownMenuItem className="text-red-600">Delete</DropdownMenuItem>
+            <DropdownMenuItem
+              className={
+                employeeStatus === "Active" ? "text-red-600" : "text-green-500"
+              }
+              onClick={() => {
+                table.options.meta?.updateData(
+                  row.index,
+                  "status",
+                  employeeStatus === "Active" ? "Inactive" : "Active"
+                );
+              }}
+            >
+              {employeeStatus === "Active" ? "Deactivate" : "Activate"}
+            </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       );
