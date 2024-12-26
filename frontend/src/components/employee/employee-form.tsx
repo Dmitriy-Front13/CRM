@@ -58,7 +58,7 @@ const formSchema = z.object({
 });
 export type EmployeeFormValues = z.infer<typeof formSchema>;
 
-type EmployeeWithProjects = Employee & {
+export interface EmployeeWithProjects extends Employee {
   projects: string[];
 };
 type EmployeeInfo = {

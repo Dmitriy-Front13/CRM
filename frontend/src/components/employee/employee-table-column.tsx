@@ -12,7 +12,6 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { MoreHorizontal } from "lucide-react";
 import { Button } from "../ui/button";
-import { updateEmployee } from "@/services/employees";
 export const columns: ColumnDef<Employee>[] = [
   {
     accessorKey: "id",

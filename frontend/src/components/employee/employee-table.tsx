@@ -24,6 +24,7 @@ import {
 
 import { EmployeeFilters } from "./employee-filters";
 import { updateEmployee } from "@/services/employees";
+import { EmployeeWithProjects } from "./employee-form";
 
 
 declare module '@tanstack/react-table' {
@@ -70,7 +71,7 @@ export function EmployeeTable<TData, TValue>({
         const currentEmployee = { ...data[rowIndex] as any };
         const updatedEmployee = {
           ...currentEmployee,
-          [columnId]: value
+          [columnId]: value 
         };
         setData(old =>
           old.map((row, index) => index === rowIndex ? updatedEmployee : row)
