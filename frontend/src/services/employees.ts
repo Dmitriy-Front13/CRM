@@ -1,8 +1,8 @@
-import { EmployeeFormValues } from '@/components/employee/employee-form';
+import { EmployeeFormValues, EmployeeWithProjects } from '@/components/employee/employee-form';
 import { axiosInstance, getCsrfToken } from './instance';
 
-export const getAllEmployees = async () => {
-  return (await axiosInstance.get("/employees")).data
+export const getAllEmployees = async (): Promise<EmployeeWithProjects[]> => {
+  return (await axiosInstance.get<EmployeeWithProjects[]>("/employees")).data
 }
 export const getEmployeeById = async (id: number) => {
   return (await axiosInstance.get(`/employees/${id}`)).data
