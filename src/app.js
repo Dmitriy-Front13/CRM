@@ -6,6 +6,7 @@ import cookieParser from 'cookie-parser';
 import swaggerDocs from './config/swagger.js';
 import swaggerUi from 'swagger-ui-express';
 
+import login from './controllers/loginController.js';
 import employeeRoutes from './routes/employeeRoutes.js';
 import projectRoutes from './routes/projectRoutes.js';
 import approvalRequestRoutes from './routes/approvalRequestRoutes.js';
@@ -32,7 +33,7 @@ const csrfProtection = csrf({ cookie: true });
 app.get('/', (req, res) => {
   res.send('Backend is running!');
 });
-
+app.post('/login', login);
 app.get('/csrf-token', csrfProtection, (req, res) => {
   res.json({ csrfToken: req.csrfToken() });
 });

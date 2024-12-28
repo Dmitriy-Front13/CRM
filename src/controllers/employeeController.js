@@ -1,10 +1,4 @@
 import prisma from '../../prisma/prisma.js';
-import {
-  findActiveEmployees,
-  findBySubdivision,
-  findByFullName,
-  findByPosition
-} from '../repositories/employeeRepository.js';
 
 // Получение всех сотрудников
 export const getAllEmployees = async (req, res) => {
@@ -188,49 +182,3 @@ export const getPeoplePartners = async (req, res) => {
 }
 };
 
-export const getActiveEmployees = async (req, res) => {
-  try {
-    const employees = await findActiveEmployees();
-    res.json(employees);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-};
-
-// Получение сотрудников по подразделению
-export const getEmployeesBySubdivision = async (req, res) => {
-  const { subdivision } = req.params;
-  try {
-    const employees = await findBySubdivision(subdivision);
-    res.json(employees);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-};
-
-// Поиск сотрудника по имени
-export const getEmployeeByFullName = async (req, res) => {
-  const { fullName } = req.params;
-  try {
-    const employee = await findByFullName(fullName);
-    if (!employee) {
-      return res.status(404).json({ message: 'Employee not found' });
-    }
-    res.json(employee);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-};
-
-export const getEmployeesByPosition = async (req, res) => { 
-  const { position } = req.params;
-  try {
-    const employees = await findByPosition(position);
-    if (!employees) {
-      return res.status(404).json({ message: 'Employee not found' });
-    }
-    res.json(employees);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-};

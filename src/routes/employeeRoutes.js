@@ -8,9 +8,6 @@ import {
   createEmployee,
   updateEmployee,
   deleteEmployee,
-  getActiveEmployees,
-  getEmployeesBySubdivision,
-  getEmployeeByFullName,
   getPeoplePartners,
 } from '../controllers/employeeController.js';
 import {
@@ -77,7 +74,6 @@ router.get('/', getAllEmployees);
  *               items:
  *                 $ref: '#/components/schemas/Employee'
  */
-router.get('/active', getActiveEmployees);
 router.get('/positions', (req, res) => {
   res.json(POSITIONS);
 });
@@ -85,29 +81,6 @@ router.get('/subdivisions', (req, res) => {
   res.json(SUBDIVISIONS);
 });
 router.get('/partners', getPeoplePartners)
-/**
- * @swagger
- * /employees/subdivision/{subdivision}:
- *   get:
- *     summary: Get employees by subdivision
- *     parameters:
- *       - name: subdivision
- *         in: path
- *         required: true
- *         schema:
- *           type: string
- *         description: Subdivision name
- *     responses:
- *       200:
- *         description: A list of employees in the subdivision
- *         content:
- *           application/json:
- *             schema:
- *               type: array
- *               items:
- *                 $ref: '#/components/schemas/Employee'
- */
-router.get('/subdivision/:subdivision', getEmployeesBySubdivision);
 
 /**
  * @swagger
@@ -150,10 +123,7 @@ router.get('/:id', getEmployeeById);
  */
 router.post('/', csrfProtection, employeeValidationRules, validate, createEmployee);
 
-
-
-router.get('/name/:fullName', getEmployeeByFullName); // Сотрудник по имени
 router.put('/:id', csrfProtection, employeeValidationRules, validate, updateEmployee);
-router.delete('/:id', csrfProtection, deleteEmployee); // Удаление сотрудника
+router.delete('/:id', csrfProtection, deleteEmployee); 
 
 export default router;
