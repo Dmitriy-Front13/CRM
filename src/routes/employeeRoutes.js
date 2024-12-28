@@ -1,7 +1,6 @@
 import express from 'express';
 import { employeeValidationRules } from '../validators/employeeValidator.js';
 import validate from '../middleware/validateMiddleware.js';
-import csrf from 'csurf';
 import {
   getAllEmployees,
   getEmployeeById,
@@ -16,7 +15,6 @@ import {
 } from '../config/constants.js';
 
 const router = express.Router();
-const csrfProtection = csrf({ cookie: true });
 
 
 /**
@@ -121,9 +119,9 @@ router.get('/:id', getEmployeeById);
  *       201:
  *         description: Employee created
  */
-router.post('/', csrfProtection, employeeValidationRules, validate, createEmployee);
+router.post('/', employeeValidationRules, validate, createEmployee);
 
-router.put('/:id', csrfProtection, employeeValidationRules, validate, updateEmployee);
-router.delete('/:id', csrfProtection, deleteEmployee); 
+router.put('/:id', employeeValidationRules, validate, updateEmployee);
+router.delete('/:id', deleteEmployee); 
 
 export default router;

@@ -1,5 +1,5 @@
-import prisma from "../../prisma/prisma";
-
+import prisma from "../../prisma/prisma.js";
+import jwt from "jsonwebtoken";
 
 const login = async (req, res) => {
   try {
@@ -15,8 +15,12 @@ const login = async (req, res) => {
     }
 
     const token = jwt.sign({ fullName: user.fullName, position: user.position }, process.env.JWT_SECRET, { expiresIn: '1h' });
-
-    res.status(200).json({ token });
+    res.cookie('authToken', token, {
+      httpOnly: true,
+      sameSite: 'strict',
+      maxAge: 60 * 60 * 1000,
+    });
+    res.status(200).json({ message: 'Login successful' });
 
   } catch (error) {
     console.log(error)

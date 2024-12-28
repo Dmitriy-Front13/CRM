@@ -1,7 +1,6 @@
 import express from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors';
-import csrf from 'csurf';
 import cookieParser from 'cookie-parser';
 import swaggerDocs from './config/swagger.js';
 import swaggerUi from 'swagger-ui-express';
@@ -28,15 +27,11 @@ app.use(
   })
 );
 
-const csrfProtection = csrf({ cookie: true });
-// Базовый маршрут для проверки сервера
+
 app.get('/', (req, res) => {
   res.send('Backend is running!');
 });
 app.post('/login', login);
-app.get('/csrf-token', csrfProtection, (req, res) => {
-  res.json({ csrfToken: req.csrfToken() });
-});
 // Подключение маршрутов
 app.use('/employees', employeeRoutes);
 app.use('/project', projectRoutes);
