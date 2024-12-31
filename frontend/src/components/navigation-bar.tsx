@@ -1,4 +1,6 @@
-import Link from 'next/link';
+"use client";
+import Link from "next/link";
+import { useAuth } from "./auth/auth-provider";
 
 const pages = [
   { href: "/projects", name: "Project list" },
@@ -7,11 +9,12 @@ const pages = [
   { href: "/approval-requests", name: "ApprovalRequestList" },
 ];
 
-export const NavigationBar= () => {
-  return (
-    <nav className='bg-white shadow-lg rounded-lg p-4'>
-      <ul className='flex justify-center items-center'>
-      {pages.map((page) => (
+export const NavigationBar = () => {
+  const { user } = useAuth();
+  return user ? (
+    <nav className="bg-white shadow-lg rounded-lg p-4">
+      <ul className="flex justify-center items-center">
+        {pages.map((page) => (
           <li className="p-2" key={page.href}>
             <Link href={page.href} className="btn-secondary">
               {page.name}
@@ -20,5 +23,5 @@ export const NavigationBar= () => {
         ))}
       </ul>
     </nav>
-  );
+  ) : null;
 };

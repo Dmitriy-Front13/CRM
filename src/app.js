@@ -5,7 +5,7 @@ import cookieParser from 'cookie-parser';
 import swaggerDocs from './config/swagger.js';
 import swaggerUi from 'swagger-ui-express';
 
-import login from './controllers/loginController.js';
+import { getUser, login } from './controllers/AuthController.js';
 import employeeRoutes from './routes/employeeRoutes.js';
 import projectRoutes from './routes/projectRoutes.js';
 import approvalRequestRoutes from './routes/approvalRequestRoutes.js';
@@ -31,7 +31,8 @@ app.use(
 app.get('/', (req, res) => {
   res.send('Backend is running!');
 });
-app.post('/login', login);
+app.post('/auth/login', login);
+app.get('/auth/user', getUser)
 // Подключение маршрутов
 app.use('/employees', employeeRoutes);
 app.use('/project', projectRoutes);
