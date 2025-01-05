@@ -34,6 +34,7 @@ export default async function RootLayout({
     try {
       user = await getUser(authToken);
     } catch (error) {
+      console.error(error)
       user = null;
     }
   }
