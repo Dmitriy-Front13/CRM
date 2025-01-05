@@ -9,7 +9,7 @@ export interface IUser {
 
 const AuthContext = createContext({
   user: null as null | IUser,
-  setUser: (user: null | IUser) => {},
+  setUser: (_user: null | IUser) => {},
 });
 
 export const AuthProvider = ({ user: userData, children }) => {
