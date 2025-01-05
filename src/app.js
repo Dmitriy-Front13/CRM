@@ -18,7 +18,7 @@ app.use(cookieParser());
 app.use(express.json());
 app.use(
   cors({
-    origin: 'http://localhost:3000', // URL фронтенда
+    origin: ['http://localhost:3000', 'https://erp-system-frontend-zeta.vercel.app'], // URL фронтенда
     methods: ['GET', 'POST', 'PUT', 'DELETE'], // Методы, которые разрешены
     credentials: true, // Если нужно отправлять куки
   })
