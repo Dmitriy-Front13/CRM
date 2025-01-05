@@ -19,7 +19,6 @@ export const getUser = async (token: string): Promise<IUser> => {
     
     return user.data;
   } catch (error) {
-    console.error('Ошибка при получении пользователя:', error);
     throw error;
   }
 };

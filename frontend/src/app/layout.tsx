@@ -31,7 +31,11 @@ export default async function RootLayout({
   const authToken = (await cookieStore).get('authToken')?.value;
   let user: null | IUser = null;
   if (authToken) {
-    user = await getUser(authToken);
+    try {
+      user = await getUser(authToken);
+    } catch (error) {
+      user = null;
+    }
   }
   return (
     <html lang="en">

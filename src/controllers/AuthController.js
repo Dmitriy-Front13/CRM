@@ -42,7 +42,6 @@ export const login = async (req, res) => {
 export const getUser = async (req, res) => {
   try {
     const token = req.cookies.authToken;
-
     if (!token) {
       return res.status(401).json({ error: "Unauthorized" });
     }
