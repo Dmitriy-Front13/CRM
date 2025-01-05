@@ -24,19 +24,16 @@ export const login = async (req, res) => {
     // Устанавливаем токен в куки
     res.cookie('authToken', token, {
       httpOnly: true,
-      sameSite: 'strict',
+      sameSite: 'lax',
       maxAge: 60 * 60 * 1000, // 1 час
     });
 
     // Возвращаем сообщение об успехе и данные пользователя
     res.status(200).json({
-      user: {
         fullName: user.fullName,
         position: user.position,
-      },
     });
   } catch (error) {
-    console.log(error);
     res.status(400).json({ error: error.message });
   }
 };
@@ -44,9 +41,7 @@ export const login = async (req, res) => {
 
 export const getUser = async (req, res) => {
   try {
-    console.log('Cookies:', req.cookies);
     const token = req.cookies.authToken;
-    console.log(`token: ${token}`);
 
     if (!token) {
       return res.status(401).json({ error: "Unauthorized" });
@@ -61,7 +56,20 @@ export const getUser = async (req, res) => {
       position: decoded.position,
     });
   } catch (error) {
-    console.error(error);
     res.status(400).json({ error: "Invalid token" });
   }
 }
+
+export const logout = async (req, res) => {
+  try {
+    // Удаляем куки, содержащие токен
+    res.clearCookie("authToken", {
+      httpOnly: true,
+      sameSite: "lax",
+    });
+
+    res.status(200).json({ message: "Successfully logged out" });
+  } catch (error) {
+    res.status(500).json({ error: "Failed to log out" });
+  }
+};

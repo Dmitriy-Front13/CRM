@@ -2,14 +2,14 @@
 
 import { createContext, useContext, useState } from "react";
 
-interface TUser {
+export interface IUser {
   fullName: string;
   position: string;
 }
 
 const AuthContext = createContext({
-  user: null as null | TUser,
-  setUser: (user: TUser) => {},
+  user: null as null | IUser,
+  setUser: (user: null | IUser) => {},
 });
 
 export const AuthProvider = ({ user: userData, children }) => {

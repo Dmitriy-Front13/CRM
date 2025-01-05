@@ -2,8 +2,10 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { NavigationBar } from "@/components/navigation-bar";
-import { AuthProvider } from "@/components/auth/auth-provider";
+import { AuthProvider, IUser } from "@/components/auth/auth-provider";
 import { getUser } from "@/services/auth";
+import { cookies } from 'next/headers';
+
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -25,18 +27,25 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const user = await getUser();
-  console.log(user);
+  const cookieStore = cookies();
+  const authToken = (await cookieStore).get('authToken')?.value;
+  let user: null | IUser = null;
+  if (authToken) {
+    user = await getUser(authToken);
+  }
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased flex flex-col min-h-screen`}
       >
         <AuthProvider user={user}>
           <NavigationBar />
+          <main className="flex-grow flex flex-col">
           {children}
+          </main>
         </AuthProvider>
       </body>
     </html>
   );
 }
+

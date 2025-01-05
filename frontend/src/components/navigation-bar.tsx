@@ -2,26 +2,44 @@
 import Link from "next/link";
 import { useAuth } from "./auth/auth-provider";
 
-const pages = [
-  { href: "/projects", name: "Project list" },
-  { href: "/employees", name: "Employee list" },
-  { href: "/leave-requests", name: "LeaveRequestList" },
-  { href: "/approval-requests", name: "ApprovalRequestList" },
-];
+const roleBasedPages = {
+  HR_MANAGER: [
+    { href: "/projects", name: "Project list" },
+    { href: "/employees", name: "Employee list" },
+    { href: "/leave-requests", name: "LeaveRequestList" },
+    { href: "/approval-requests", name: "ApprovalRequestList" },
+  ],
+  PROJECT_MANAGER: [
+    { href: "/projects", name: "Project list" },
+    { href: "/leave-requests", name: "LeaveRequestList" },
+    { href: "/approval-requests", name: "ApprovalRequestList" },
+  ],
+  PROGRAMMER: [
+    { href: "/projects", name: "My Projects" },
+    { href: "/leave-requests", name: "My Leave Requests" },
+  ],
+};
 
 export const NavigationBar = () => {
   const { user } = useAuth();
-  return user ? (
-    <nav className="bg-white shadow-lg rounded-lg p-4">
-      <ul className="flex justify-center items-center">
-        {pages.map((page) => (
-          <li className="p-2" key={page.href}>
-            <Link href={page.href} className="btn-secondary">
-              {page.name}
-            </Link>
-          </li>
-        ))}
-      </ul>
-    </nav>
-  ) : null;
+
+  if (!user) return null;
+
+  const pages = roleBasedPages[user.position] || [];
+
+  return (
+    <header className="bg-white shadow-lg p-4">
+      <nav>
+        <ul className="flex justify-center items-center">
+          {pages.map((page) => (
+            <li className="p-2" key={page.href}>
+              <Link href={page.href} className="btn-secondary">
+                {page.name}
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </nav>
+    </header>
+  );
 };
