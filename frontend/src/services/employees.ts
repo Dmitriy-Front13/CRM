@@ -1,5 +1,5 @@
 import { EmployeeFormValues, EmployeeWithProjects } from '@/components/employee/employee-form';
-import { axiosInstance, getCsrfToken } from './instance';
+import { axiosInstance } from './instance';
 
 export const getAllEmployees = async (): Promise<EmployeeWithProjects[]> => {
   return (await axiosInstance.get<EmployeeWithProjects[]>("/employees")).data
@@ -10,17 +10,7 @@ export const getEmployeeById = async (id: number) => {
 
 export const createEmployee = async (data: EmployeeFormValues) => {
   try {
-    const csrfToken = await getCsrfToken();
-    await axiosInstance.post(
-      "/employees",
-      data,
-      {
-        headers: {
-          "Content-Type": "application/json",
-          "X-CSRF-Token": csrfToken,
-        },
-      },
-    );
+    await axiosInstance.post("/employees", data);
   } catch (error) {
     throw error;
   }
@@ -29,31 +19,17 @@ export const createEmployee = async (data: EmployeeFormValues) => {
 
 export const updateEmployee = async (id: number, data: EmployeeFormValues) => {
   try {
-    const csrfToken = await getCsrfToken();
-    const response = await axiosInstance.put(`/employees/${id}`, data, {
-
-      headers: {
-        "Content-Type": "application/json",
-        "X-CSRF-Token": csrfToken
-      },
-    }
-    );
+    const response = await axiosInstance.put(`/employees/${id}`, data);
     return response.data
   } catch (error) {
     throw error;
   }
 }
 export const deleteEmployee = async (id: number) => {
-  const csrfToken = await getCsrfToken();
-  await axiosInstance.delete(`/employees/${id}`, {
-    headers: {
-      "Content-Type": "application/json",
-      "X-CSRF-Token": csrfToken
-    },
-  });
+  await axiosInstance.delete(`/employees/${id}`);
 };
 
-export const getPeoplePartners = async (): Promise<{ fullName: string}[]> => {
-  return (await axiosInstance.get<{ fullName: string}[]>("/employees/partners")).data
+export const getPeoplePartners = async (): Promise<{ fullName: string }[]> => {
+  return (await axiosInstance.get<{ fullName: string }[]>("/employees/partners")).data
 }
 
