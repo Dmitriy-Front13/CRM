@@ -24,8 +24,9 @@ export const login = async (req, res) => {
     // Устанавливаем токен в куки
     res.cookie('authToken', token, {
       httpOnly: true,
-      sameSite: 'lax',
-      maxAge: 60 * 60 * 1000, // 1 час
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'None',
+      maxAge: 60 * 60 * 1000,
     });
 
     // Возвращаем сообщение об успехе и данные пользователя
