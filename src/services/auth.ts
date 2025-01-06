@@ -5,20 +5,5 @@ export const login = async (fullName: string, password: string): Promise<IUser> 
   return (await axiosInstance.post<IUser>("/auth", { fullName, password })).data
 }
 
-export const logOut = async () => {
-  return await axiosInstance.post("/auth/logout")
-}
 
-export const getUser = async (token: string): Promise<IUser> => {
-  try {
-    const user = await axiosInstance.get('/auth', {
-      headers: {
-        Cookie: `authToken=${token}`,
-      },
-    });
-    
-    return user.data;
-  } catch (error) {
-    throw error;
-  }
-};
+

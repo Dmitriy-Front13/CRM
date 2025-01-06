@@ -8,6 +8,7 @@ export default async function EditEmployeePage({
 }: {
   params: Promise<{ id: string }>;
 }) {
+  
   const employeeId = (await params).id;
   const [projects, partners] =
     await Promise.all([
