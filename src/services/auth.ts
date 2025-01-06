@@ -1,4 +1,4 @@
-import { IUser } from "@/components/auth/auth-provider"
+import { IUser } from "@/actions"
 import { axiosInstance } from "./instance"
 
 export const login = async (fullName: string, password: string): Promise<IUser> => {
