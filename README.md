@@ -1,36 +1,49 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Out of Office Solution
 
-## Getting Started
+## Project Description
 
-First, run the development server:
+This project is a solution for managing employee leaves and absences within an organization. It includes role-based access control, authorization, and CRUD operations for employee management, built entirely with **Next.js**.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+### Implemented Features:
+- **Role-Based Access**:
+  - Administrator, HR Manager, Project Manager, Employee.
+- **Authorization**:
+  - Secure login system using predefined credentials.
+- **CRUD Operations for Employees**:
+  - Create, update, and deactivate employees.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Login Credentials:
+- **Username**: `Alice Jonson`  
+- **Password**: `securepassword`
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Core Functionality
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+1. **HR Manager**:
+   - Full access to employee lists and approval requests.
+   - Ability to add, update, and deactivate employees.
+   - Approve or reject leave requests.
 
-## Learn More
+2. **Project Manager**:
+   - Full access to project lists and approval requests.
+   - Assign employees to projects.
+   - Approve or reject leave requests.
 
-To learn more about Next.js, take a look at the following resources:
+3. **Employee**:
+   - Access to their own leave requests and assigned projects.
+   - Create, update, submit, and cancel leave requests.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Deployment
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+The application is deployed on **Vercel**.  
+You can access it at: [Application Link](https://erp-system-frontend-zeta.vercel.app/)
 
-## Deploy on Vercel
+## Project Structure
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- **Backend and Frontend**: Both are implemented using **Next.js**.
+- **Database**: Integration with a relational database using Prisma for ORM.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Future Enhancements
+
+- Add advanced filtering and sorting options for data tables.
+- Extend role-based permissions with more granular controls.
+- Implement additional features as outlined in the technical specifications.
