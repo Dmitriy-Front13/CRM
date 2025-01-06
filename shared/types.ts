@@ -1,1 +1,0 @@
-export type { Employee, Project, LeaveRequest } from "./prisma-types" 
