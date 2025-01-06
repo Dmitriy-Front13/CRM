@@ -25,14 +25,16 @@ export const login = async (req, res) => {
     res.cookie('authToken', token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
-      sameSite: 'None',
+      sameSite: process.env.NODE_ENV === 'production' ? 'None' : 'lax',
       maxAge: 60 * 60 * 1000,
+      path: '/',
+      domain: process.env.NODE_ENV === 'production' ? 'https://erp-system-frontend-zeta.vercel.app' : 'localhost'
     });
 
     // Возвращаем сообщение об успехе и данные пользователя
     res.status(200).json({
-        fullName: user.fullName,
-        position: user.position,
+      fullName: user.fullName,
+      position: user.position,
     });
   } catch (error) {
     res.status(400).json({ error: error.message });
@@ -63,10 +65,7 @@ export const getUser = async (req, res) => {
 export const logout = async (req, res) => {
   try {
     // Удаляем куки, содержащие токен
-    res.clearCookie("authToken", {
-      httpOnly: true,
-      sameSite: "lax",
-    });
+    res.clearCookie("authToken");
 
     res.status(200).json({ message: "Successfully logged out" });
   } catch (error) {
