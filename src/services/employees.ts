@@ -63,6 +63,7 @@ export const updateEmployee = async (id: number, data: EmployeeFormValues) => {
     throw error;
   }
 }
+export type TUpdateEmployee = typeof updateEmployee
 
 export const getPeoplePartners = async (): Promise<{ fullName: string }[]> => {
   try {
