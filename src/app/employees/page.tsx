@@ -1,6 +1,5 @@
 import { EmployeeTable } from "@/components/employee/employee-table";
 import { columns } from "@/components/employee/employee-table-column";
-// import { verifySession } from "@/actions";
 import { getAllEmployees } from "@/services/employees";
 import { PlusIcon } from "lucide-react";
 import Link from "next/link";
