@@ -13,7 +13,7 @@ This project is a solution for managing employee leaves and absences within an o
   - Create, update, and deactivate employees.
 
 ### Login Credentials:
-- **Username**: `Alice Jonson`  
+- **Username**: `Alice Johnson`  
 - **Password**: `securepassword`
 
 ## Core Functionality
