@@ -1,5 +1,7 @@
 import Link from "next/link";
 import { encrypt } from "@/actions";
+import { Button } from "./ui/button";
+import { logOut } from "@/actions";
 
 const roleBasedPages = {
   HR_MANAGER: [
@@ -25,8 +27,8 @@ export const NavigationBar = async () => {
   const pages = roleBasedPages[user.position] || [];
   return (
     <header className="bg-white shadow-lg p-4">
-      <nav>
-        <ul className="flex justify-center items-center">
+      <nav className="flex items-center ">
+        <ul className="flex justify-center items-center flex-1">
           {pages.map((page) => (
             <li className="p-2" key={page.href}>
               <Link href={page.href} className="btn-secondary">
@@ -35,6 +37,9 @@ export const NavigationBar = async () => {
             </li>
           ))}
         </ul>
+        <Button variant="outline" className="w-[100px]" onClick={logOut}>
+          Log out
+        </Button>
       </nav>
     </header>
   );
