@@ -7,11 +7,11 @@ import Link from "next/link";
 import { POSITIONS, STATUS_CHOICE, SUBDIVISIONS } from "@/constants";
 
 const employeeFilters = [
+  { columnId: "fullName", placeholder: "Search by Name", input: true },
   { columnId: "status", placeholder: "All statuses", options: STATUS_CHOICE },
   { columnId: "position", placeholder: "All positions", options: POSITIONS },
   { columnId: "subdivision", placeholder: "All subdivisions", options: SUBDIVISIONS },
-  { columnId: "fullName", placeholder: "Search by Name", input: true },
-];
+];  
 export default async function Home() {
   const data = await getAllEmployees();
   return (

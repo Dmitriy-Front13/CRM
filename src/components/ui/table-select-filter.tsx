@@ -10,7 +10,7 @@ interface TableSelectFilterProps<TData> {
   table: Table<TData>;
   columnId: string;
   placeholder: string;
-  options: string[];
+  options: Record<string, string>;
 }
 
 export function TableSelectFilter<TData>({
@@ -37,7 +37,7 @@ export function TableSelectFilter<TData>({
       </SelectTrigger>
       <SelectContent>
         <SelectItem value="all">{placeholder}</SelectItem>
-        {options.map((option) => (
+        {Object.values(options).map((option) => (
           <SelectItem key={option} value={option}>
             {option}
           </SelectItem>

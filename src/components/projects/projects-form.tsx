@@ -144,7 +144,7 @@ export function ProjectForm({ project }: ProjectFormProps) {
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        {PROJECT_TYPES.map((type) => (
+                        {Object.values(PROJECT_TYPES).map((type) => (
                           <SelectItem key={type} value={type}>
                             {type}
                           </SelectItem>

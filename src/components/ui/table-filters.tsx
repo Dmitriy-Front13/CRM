@@ -5,7 +5,7 @@ import { Table } from "@tanstack/react-table";
 
 export type TFilters = {
   placeholder: string;
-  options?: string[];
+  options?: Record<string, string>;
   columnId: string;
   input?: boolean;
 }[];
@@ -42,7 +42,7 @@ export function TableFilters<TData>({
             table={table}
             columnId={filter.columnId}
             placeholder={filter.placeholder}
-            options={filter.options ?? []}
+            options={filter.options ?? {}}
           />
         )
       )}
