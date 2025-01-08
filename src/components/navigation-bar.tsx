@@ -2,18 +2,24 @@ import Link from "next/link";
 import { encrypt } from "@/actions";
 
 const roleBasedPages = {
-  HR_MANAGER: [
+  "HR Manager": [
     { href: "/projects", name: "Project list" },
     { href: "/employees", name: "Employee list" },
     { href: "/leave-requests", name: "LeaveRequestList" },
     { href: "/approval-requests", name: "ApprovalRequestList" },
   ],
-  PROJECT_MANAGER: [
+  "Administrator": [
+    { href: "/projects", name: "Project list" },
+    { href: "/employees", name: "Employee list" },
+    { href: "/leave-requests", name: "LeaveRequestList" },
+    { href: "/approval-requests", name: "ApprovalRequestList" },
+  ],
+  "Project Manager": [
     { href: "/projects", name: "Project list" },
     { href: "/leave-requests", name: "LeaveRequestList" },
     { href: "/approval-requests", name: "ApprovalRequestList" },
   ],
-  PROGRAMMER: [
+  "Employee": [
     { href: "/projects", name: "My Projects" },
     { href: "/leave-requests", name: "My Leave Requests" },
   ],

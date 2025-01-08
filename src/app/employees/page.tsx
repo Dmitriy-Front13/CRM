@@ -1,9 +1,17 @@
-import { EmployeeTable } from "@/components/employee/employee-table";
+import { GenericTable } from "@/components/ui/generic-table";
 import { columns } from "@/components/employee/employee-table-column";
-// import { verifySession } from "@/actions";
 import { getAllEmployees } from "@/services/employees";
+import { updateEmployee } from "@/actions";
 import { PlusIcon } from "lucide-react";
 import Link from "next/link";
+import { POSITIONS, STATUS_CHOICE, SUBDIVISIONS } from "@/constants";
+
+const employeeFilters = [
+  { columnId: "status", placeholder: "All statuses", options: STATUS_CHOICE },
+  { columnId: "position", placeholder: "All positions", options: POSITIONS },
+  { columnId: "subdivision", placeholder: "All subdivisions", options: SUBDIVISIONS },
+  { columnId: "fullName", placeholder: "Search by Name", input: true },
+];
 export default async function Home() {
   const data = await getAllEmployees();
   return (
@@ -18,7 +26,7 @@ export default async function Home() {
           Add Employee
         </Link>
       </div>
-      <EmployeeTable columns={columns} data={data} />
+      <GenericTable columns={columns} data={data} filters={employeeFilters} updateEntity={updateEmployee}/>
     </div>
   );
 }
