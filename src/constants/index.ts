@@ -1,4 +1,4 @@
-export const POSITIONS = ["HR_Manager", "Project_Manager", "Administrator", "Employee"];
+export const POSITIONS = ["HR Manager", "Project Manager", "Administrator", "Employee"];
 export const SUBDIVISIONS = ["HR", "Finance", "Marketing", "Sales", "R&D", "IT"];
 export const PROJECT_TYPES = [
   "Software Development",

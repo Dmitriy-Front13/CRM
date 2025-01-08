@@ -1,6 +1,6 @@
 import { updateProject } from "@/actions";
 import { GenericTable } from "@/components/ui/generic-table";
-import { getAllProjects } from "@/services/projects";
+import { getAllProjects } from "@/actions/projects/actions";
 import { PlusIcon } from "lucide-react";
 import Link from "next/link";
 import { columns } from "@/components/projects/projects-table-column";

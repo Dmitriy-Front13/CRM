@@ -1,7 +1,7 @@
 import { EmployeeForm } from "@/components/employee/employee-form";
 
 import { getEmployeeById, getPeoplePartners } from "@/services/employees";
-import { getAllProjects } from "@/services/projects";
+import { getAllProjects } from "@/actions/projects/actions";
 
 export default async function EditEmployeePage({
   params,

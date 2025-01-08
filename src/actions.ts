@@ -77,4 +77,6 @@ export async function updateProject(id: number, body: Project) {
   }
 }
 
+
+
 export type TUpdateProject = typeof updateProject;
