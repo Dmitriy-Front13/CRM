@@ -24,6 +24,7 @@ import {
 
 import { TableFilters, TFilters } from "./table-filters";
 import { TUpdateEmployee } from "@/services/employees";
+import { TUpdateProject } from "@/actions";
 
 declare module '@tanstack/react-table' {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -35,7 +36,7 @@ interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
   filters: TFilters
-  updateEntity: TUpdateEmployee
+  updateEntity: TUpdateEmployee | TUpdateProject
 }
 
 export function GenericTable<TData, TValue>({

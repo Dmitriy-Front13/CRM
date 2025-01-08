@@ -44,15 +44,16 @@ async function main() {
   await prisma.project.createMany({
     data: [
       {
-        projectType: 'Internal',
+        projectType: 'Marketing Campaign',
         startDate: new Date('2023-01-01'),
         status: 'Active',
         projectName: 'CRM System',
         projectManager: 'John Doe',
       },
       {
-        projectType: 'External',
+        projectType: 'Software Development',
         startDate: new Date('2023-06-01'),
+        endDate: new Date('2023-12-31'),
         status: 'Completed',
         projectName: 'E-commerce Platform',
         projectManager: 'Alice Johnson',
