@@ -1,7 +1,5 @@
-import { EmployeeForm } from "@/components/employee/employee-form";
-
+import { ProjectForm } from "@/components/projects/projects-form";
 import { getEmployeeById, getPeoplePartners } from "@/services/employees";
-import { getAllProjects } from "@/services/projects";
 
 export default async function EditEmployeePage({
   params,
@@ -9,16 +7,12 @@ export default async function EditEmployeePage({
   params: Promise<{ id: string }>;
 }) {
   
-  const employeeId = (await params).id;
-  const [projects, partners] =
-    await Promise.all([
-      getAllProjects(),
-      getPeoplePartners(),
-    ]);
+  const projectId = (await params).id;
+  
   if (employeeId === "new")
     return (
       <div className="container mx-auto py-10 px-4">
-        <EmployeeForm
+        <ProjectForm
           employeeInfo={{
             projects,
             partners,
@@ -26,10 +20,10 @@ export default async function EditEmployeePage({
         />
       </div>
     );
-  const employee = await getEmployeeById(Number(employeeId));
+  const project = await getEmployeeById(Number(projectId));
   return (
     <div className="container mx-auto py-10 px-4">
-      <EmployeeForm
+      <ProjectForm
         employee={employee}
         employeeInfo={{ projects, partners }}
       />

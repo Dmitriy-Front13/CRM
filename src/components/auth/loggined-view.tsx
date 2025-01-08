@@ -7,14 +7,12 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { IUser } from "./auth-provider";
-
+import { logOut, IUser } from "@/actions";
 interface LoggedInViewProps {
   user: IUser;
-  logout: () => void;
 }
 
-export function LoggedInView({ user, logout }: LoggedInViewProps) {
+export function LoggedInView({ user }: LoggedInViewProps) {
   return (
     <div className="flex flex-grow items-center justify-center bg-gray-100">
       <Card className="w-full max-w-md">
@@ -51,7 +49,7 @@ export function LoggedInView({ user, logout }: LoggedInViewProps) {
           </div>
         </CardContent>
         <CardFooter>
-          <Button variant="outline" className="w-full" onClick={logout}>
+          <Button variant="outline" className="w-full" onClick={logOut}>
             Log out
           </Button>
         </CardFooter>

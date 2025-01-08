@@ -1,6 +1,5 @@
-"use client";
 import Link from "next/link";
-import { useAuth } from "./auth/auth-provider";
+import { encrypt } from "@/actions";
 
 const roleBasedPages = {
   HR_MANAGER: [
@@ -20,13 +19,10 @@ const roleBasedPages = {
   ],
 };
 
-export const NavigationBar = () => {
-  const { user } = useAuth();
-
+export const NavigationBar = async () => {
+  const user = await encrypt();
   if (!user) return null;
-
   const pages = roleBasedPages[user.position] || [];
-
   return (
     <header className="bg-white shadow-lg p-4">
       <nav>

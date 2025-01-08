@@ -23,14 +23,16 @@ import {
 } from "@/components/ui/form";
 import { login } from "@/services/auth";
 import { useState } from "react";
-import { useAuth } from "@/components/auth/auth-provider";
+import { useRouter } from "next/navigation";
+// import { useAuth } from "@/components/auth/auth-provider";
 const formSchema = z.object({
   fullName: z.string().min(1, { message: "Full name is required" }),
   password: z.string().min(1, { message: "Password is required" }),
 });
 
 export default function AuthForm() {
-  const {setUser } = useAuth();
+  // const {setUser } = useAuth();
+  const router = useRouter()
   const [error, setError] = useState<string | null>(null);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -44,7 +46,8 @@ export default function AuthForm() {
     try {
       setError(null);
       const data = await login(values.fullName, values.password);
-      setUser(data);
+      router.refresh()
+      // setUser(data);
     } catch (error) {
       console.error(error);
       setError(

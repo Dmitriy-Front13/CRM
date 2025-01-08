@@ -22,8 +22,9 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
-import { EmployeeFilters } from "./employee-filters";
-import { updateEmployee } from "@/services/employees";
+import { TableFilters, TFilters } from "./table-filters";
+import { TUpdateEmployee } from "@/services/employees";
+import { TUpdateProject } from "@/actions";
 
 declare module '@tanstack/react-table' {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -34,11 +35,15 @@ declare module '@tanstack/react-table' {
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
+  filters: TFilters
+  updateEntity: TUpdateEmployee | TUpdateProject
 }
 
-export function EmployeeTable<TData, TValue>({
+export function GenericTable<TData, TValue>({
   columns,
   data: initialData,
+  filters,
+  updateEntity
 }: DataTableProps<TData, TValue>) {
   const [data, setData] = useState(initialData);
   const [sorting, setSorting] = useState<SortingState>([
@@ -60,16 +65,16 @@ export function EmployeeTable<TData, TValue>({
     meta: {
       updateData: async (rowIndex: number, columnId: string, value: unknown) => {
         const oldData = [...data];
-        const currentEmployee = { ...data[rowIndex] as any }; // eslint-disable-line @typescript-eslint/no-explicit-any
-        const updatedEmployee = {
-          ...currentEmployee,
+        const currentEntity = { ...data[rowIndex] as any }; // eslint-disable-line @typescript-eslint/no-explicit-any
+        const updatedEntity = {
+          ...currentEntity,
           [columnId]: value 
         };
         setData(old =>
-          old.map((row, index) => index === rowIndex ? updatedEmployee : row)
+          old.map((row, index) => index === rowIndex ? updatedEntity : row)
         );
         try {
-          await updateEmployee(updatedEmployee.id, updatedEmployee);
+          await updateEntity(updatedEntity.id, updatedEntity);
         } catch (error) {
           setData(oldData);
           console.error('Error updating employee:', error);
@@ -80,8 +85,9 @@ export function EmployeeTable<TData, TValue>({
 
   return (
     <>
-      <EmployeeFilters
+      <TableFilters
         table={table}
+        filters={filters}
       />
       <div className="rounded-md border">
         <Table>
