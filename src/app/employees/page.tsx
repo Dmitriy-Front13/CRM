@@ -1,11 +1,13 @@
 import { GenericTable } from "@/components/ui/generic-table";
 import { columns } from "@/components/employee/employee-table-column";
-import { getAllEmployees, getEmployeesForHR } from "@/services/employees";
+import { getAllEmployees, getEmployeesForHR, getEmployeesForPM } from "@/services/employees";
 import { updateEmployee } from "@/actions";
 import { PlusIcon } from "lucide-react";
 import Link from "next/link";
 import { POSITIONS, STATUS_CHOICE, SUBDIVISIONS } from "@/constants";
 import { encrypt } from "@/actions";
+import { EmployeeWithProjects } from "@/components/employee/employee-form";
+import { redirect } from "next/navigation";
 
 const employeeFilters = [
   { columnId: "fullName", placeholder: "Search by Name", input: true },
@@ -19,11 +21,19 @@ const employeeFilters = [
 ];
 export default async function Home() {
   const user = await encrypt();
-  let data;
-  if (user!.position === POSITIONS.ADMINISTRATOR) {
-    data = await getAllEmployees();
-  } else {
-    data = await getEmployeesForHR(user!.fullName);
+  let data: EmployeeWithProjects[];
+  switch (user!.position) {
+    case POSITIONS.ADMINISTRATOR:
+      data = await getAllEmployees();
+      break;
+    case POSITIONS.PROJECT_MANAGER:
+      data = await getEmployeesForPM();
+      break;
+    case POSITIONS.HR_MANAGER:
+      data = await getEmployeesForHR(user!.fullName);
+      break;
+    default:
+      redirect('/');
   }
 
   return (

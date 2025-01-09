@@ -19,6 +19,7 @@ const roleBasedPages = {
   ],
   [POSITIONS.PROJECT_MANAGER]: [
     { href: "/projects", name: "Project list" },
+    { href: "/employees", name: "Employee list" },
     { href: "/leave-requests", name: "LeaveRequestList" },
     { href: "/approval-requests", name: "ApprovalRequestList" },
   ],

@@ -49,6 +49,27 @@ export const getEmployeesForHR = async (
     throw error;
   }
 };
+export const getEmployeesForPM = async (): Promise<EmployeeWithProjects[]> => {
+  try {
+    const employees = await prisma.employee.findMany({
+      where: { position: POSITIONS.EMPLOYEE },
+      include: {
+        projects: {
+          select: { projectName: true },
+        },
+      },
+    });
+
+    const simplifiedEmployees = employees.map((employee) => ({
+      ...employee,
+      projects: employee.projects.map((project) => project.projectName),
+    }));
+
+    return simplifiedEmployees;
+  } catch (error) {
+    throw error;
+  }
+};
 export const getEmployeeById = async (
   id: number
 ): Promise<EmployeeWithProjects> => {
