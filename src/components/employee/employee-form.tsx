@@ -196,7 +196,7 @@ export function EmployeeForm({ employee, employeeInfo }: EmployeeFormProps) {
                           </SelectTrigger>
                         </FormControl>
                         <SelectContent>
-                          {SUBDIVISIONS.map((subdivision) => (
+                          {Object.values(SUBDIVISIONS).map((subdivision) => (
                             <SelectItem key={subdivision} value={subdivision}>
                               {subdivision}
                             </SelectItem>
@@ -223,7 +223,7 @@ export function EmployeeForm({ employee, employeeInfo }: EmployeeFormProps) {
                           </SelectTrigger>
                         </FormControl>
                         <SelectContent>
-                          {POSITIONS.map((position) => (
+                          {Object.values(POSITIONS).map((position) => (
                             <SelectItem key={position} value={position}>
                               {position}
                             </SelectItem>

@@ -2,20 +2,27 @@ import Link from "next/link";
 import { encrypt } from "@/actions";
 import { Button } from "./ui/button";
 import { logOut } from "@/actions";
-
+import { POSITIONS } from "@/constants";
 const roleBasedPages = {
-  HR_MANAGER: [
+  [POSITIONS.HR_MANAGER]: [
     { href: "/projects", name: "Project list" },
     { href: "/employees", name: "Employee list" },
     { href: "/leave-requests", name: "LeaveRequestList" },
     { href: "/approval-requests", name: "ApprovalRequestList" },
   ],
-  PROJECT_MANAGER: [
+  [POSITIONS.ADMINISTRATOR]: [
     { href: "/projects", name: "Project list" },
+    { href: "/employees", name: "Employee list" },
     { href: "/leave-requests", name: "LeaveRequestList" },
     { href: "/approval-requests", name: "ApprovalRequestList" },
   ],
-  PROGRAMMER: [
+  [POSITIONS.PROJECT_MANAGER]: [
+    { href: "/projects", name: "Project list" },
+    { href: "/employees", name: "Employee list" },
+    { href: "/leave-requests", name: "LeaveRequestList" },
+    { href: "/approval-requests", name: "ApprovalRequestList" },
+  ],
+  [POSITIONS.EMPLOYEE]: [
     { href: "/projects", name: "My Projects" },
     { href: "/leave-requests", name: "My Leave Requests" },
   ],

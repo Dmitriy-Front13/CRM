@@ -36,6 +36,8 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { AlertCircle } from 'lucide-react';
 import { Project } from "@prisma/client";
 import { PROJECT_TYPES } from "@/constants";
+import { updateProject } from "@/actions";
+import { createProject } from "@/actions/projects/actions";
 
 const formSchema = z.object({
   projectName: z.string().min(2, {
@@ -44,10 +46,14 @@ const formSchema = z.object({
   projectType: z.string().min(1, {
     message: "Project Type is required.",
   }),
-  comment: z.string().optional(),
+  status: z.string(),
+  comment: z.string().nullable(),
+  startDate: z.date(),
+  endDate: z.date().nullable(),
+  projectManager: z.string().nullable()
 });
 
-type ProjectFormValues = z.infer<typeof formSchema>
+export type FormData = z.infer<typeof formSchema>;
 interface ProjectFormProps {
   project?: Project;
 }
@@ -55,15 +61,16 @@ export function ProjectForm({ project }: ProjectFormProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const initialData = {
+  const initialData: FormData = {
     projectName: project?.projectName || "",
     projectType: project?.projectType || "",
     status: project?.status || "Active",
-    comment: project?.comment || "",
+    comment: project?.comment || null,
     startDate: project?.startDate || new Date(),
-    endDate: null,
-    projectManager: null
+    endDate: project?.endDate || null,
+    projectManager: project?.projectManager || null
   };
+
 
   const form = useForm({
     resolver: zodResolver(formSchema),
@@ -72,15 +79,15 @@ export function ProjectForm({ project }: ProjectFormProps) {
 
   const router = useRouter();
 
-  const onSubmit = async (data: ProjectFormValues) => {
+  const onSubmit = async (data: FormData) => {
     try {
       setIsLoading(true);
       setError(null);
-      // if (project) {
-      //   await updateProject(project.id, data);
-      // } else {
-      //   await createProject(data);
-      // }
+      if (project) {
+        await updateProject(project.id, { ...data, id: project.id })
+      } else {
+        await createProject(data);
+      }
       router.push("/projects");
     } catch (error) {
       if (error instanceof Error) {
@@ -137,7 +144,7 @@ export function ProjectForm({ project }: ProjectFormProps) {
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        {PROJECT_TYPES.map((type) => (
+                        {Object.values(PROJECT_TYPES).map((type) => (
                           <SelectItem key={type} value={type}>
                             {type}
                           </SelectItem>
@@ -177,7 +184,9 @@ export function ProjectForm({ project }: ProjectFormProps) {
                     <FormControl>
                       <Textarea
                         placeholder="Add any additional comments here"
-                        {...field}
+                        value={field.value ?? ""}
+                        onChange={field.onChange}
+                        onBlur={field.onBlur}
                       />
                     </FormControl>
                     <FormMessage />
