@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import * as z from "zod";
 import Link from "next/link";
@@ -34,12 +34,13 @@ import {
 import { POSITIONS, SUBDIVISIONS } from "@/constants";
 
 import { Checkbox } from "@/components/ui/checkbox";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
-import { AlertCircle } from 'lucide-react'
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { AlertCircle } from "lucide-react";
 
 import { createEmployee, updateEmployee } from "@/services/employees";
 import { Input } from "../ui/input";
 import { Employee, Project } from "@prisma/client";
+import { encrypt } from "@/actions";
 
 const formSchema = z.object({
   fullName: z.string().min(2, {
@@ -61,10 +62,10 @@ export type EmployeeFormValues = z.infer<typeof formSchema>;
 
 export interface EmployeeWithProjects extends Employee {
   projects: string[];
-};
+}
 type EmployeeInfo = {
   projects: Project[];
-  partners: {fullName: string}[];
+  partners: { fullName: string }[];
 };
 interface EmployeeFormProps {
   employee?: EmployeeWithProjects;
@@ -72,6 +73,9 @@ interface EmployeeFormProps {
 }
 
 export function EmployeeForm({ employee, employeeInfo }: EmployeeFormProps) {
+  const [filteredPositions, setFilteredPositions] = useState<string[]>(
+    Object.values(POSITIONS)
+  );
   const { projects, partners } = employeeInfo;
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -94,7 +98,7 @@ export function EmployeeForm({ employee, employeeInfo }: EmployeeFormProps) {
   const onSubmit = async (data: EmployeeFormValues) => {
     try {
       setIsLoading(true);
-      setError(null)
+      setError(null);
       if (employee) {
         await updateEmployee(employee.id, data);
       } else {
@@ -104,13 +108,25 @@ export function EmployeeForm({ employee, employeeInfo }: EmployeeFormProps) {
     } catch (error) {
       if (error instanceof Error) {
         setError(error.message);
-    } else {
+      } else {
         setError("An unexpected error occurred. Please try again.");
-    }
+      }
     } finally {
       setIsLoading(false);
     }
   };
+  useEffect(() => {
+    const fetchUser = async () => {
+      const user = await encrypt();
+      if (user?.position === POSITIONS.HR_MANAGER) {
+        setFilteredPositions([POSITIONS.ADMINISTRATOR]);
+      } else {
+        setFilteredPositions(Object.values(POSITIONS));
+      }
+    };
+    fetchUser();
+  }, []);
+
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)}>
@@ -121,7 +137,7 @@ export function EmployeeForm({ employee, employeeInfo }: EmployeeFormProps) {
             </CardTitle>
           </CardHeader>
           <CardContent>
-          {error && (
+            {error && (
               <Alert variant="destructive" className="mb-6">
                 <AlertCircle className="h-4 w-4" />
                 <AlertTitle>Error</AlertTitle>
@@ -213,23 +229,31 @@ export function EmployeeForm({ employee, employeeInfo }: EmployeeFormProps) {
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Position</FormLabel>
-                      <Select
-                        onValueChange={field.onChange}
-                        defaultValue={field.value}
-                      >
-                        <FormControl>
-                          <SelectTrigger>
-                            <SelectValue placeholder="Select a position" />
-                          </SelectTrigger>
-                        </FormControl>
-                        <SelectContent>
-                          {Object.values(POSITIONS).map((position) => (
-                            <SelectItem key={position} value={position}>
-                              {position}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
+                      {filteredPositions.length === 1 ? (
+                        // Если только один вариант, отображаем статичное значение
+                        <div className="py-2 px-3 border rounded bg-gray-100 text-gray-800">
+                          {filteredPositions[0]}
+                        </div>
+                      ) : (
+                        // Если вариантов больше одного, отображаем селект
+                        <Select
+                          onValueChange={field.onChange}
+                          defaultValue={field.value}
+                        >
+                          <FormControl>
+                            <SelectTrigger>
+                              <SelectValue placeholder="Select a position" />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            {filteredPositions.map((position) => (
+                              <SelectItem key={position} value={position}>
+                                {position}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      )}
                       <FormMessage />
                     </FormItem>
                   )}
@@ -312,7 +336,10 @@ export function EmployeeForm({ employee, employeeInfo }: EmployeeFormProps) {
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>People Partner</FormLabel>
-                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                    >
                       <FormControl>
                         <SelectTrigger>
                           <SelectValue placeholder="Select a People Partner" />
@@ -320,7 +347,10 @@ export function EmployeeForm({ employee, employeeInfo }: EmployeeFormProps) {
                       </FormControl>
                       <SelectContent>
                         {partners.map((partner) => (
-                          <SelectItem key={partner.fullName} value={partner.fullName}>
+                          <SelectItem
+                            key={partner.fullName}
+                            value={partner.fullName}
+                          >
                             {partner.fullName}
                           </SelectItem>
                         ))}

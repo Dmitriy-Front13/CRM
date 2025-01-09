@@ -1,6 +1,10 @@
 import { GenericTable } from "@/components/ui/generic-table";
 import { columns } from "@/components/employee/employee-table-column";
-import { getAllEmployees, getEmployeesForHR, getEmployeesForPM } from "@/services/employees";
+import {
+  getAllEmployees,
+  getEmployeesForHR,
+  getEmployeesForPM,
+} from "@/services/employees";
 import { updateEmployee } from "@/actions";
 import { PlusIcon } from "lucide-react";
 import Link from "next/link";
@@ -22,31 +26,36 @@ const employeeFilters = [
 export default async function Home() {
   const user = await encrypt();
   let data: EmployeeWithProjects[];
+
   switch (user!.position) {
     case POSITIONS.ADMINISTRATOR:
       data = await getAllEmployees();
       break;
     case POSITIONS.PROJECT_MANAGER:
       data = await getEmployeesForPM();
+
       break;
     case POSITIONS.HR_MANAGER:
       data = await getEmployeesForHR(user!.fullName);
+
       break;
     default:
-      redirect('/');
+      redirect("/");
   }
 
   return (
     <div className="container mx-auto px-10">
       <div className="flex justify-between items-center mt-4">
         <h1 className="text-2xl font-bold">Employees</h1>
-        <Link
-          href="/employees/new"
-          className="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2"
-        >
-          <PlusIcon className="mr-2 h-4 w-4" />
-          Add Employee
-        </Link>
+        {user!.position !== POSITIONS.PROJECT_MANAGER && (
+          <Link
+            href="/employees/new"
+            className="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2"
+          >
+            <PlusIcon className="mr-2 h-4 w-4" />
+            Add Employee
+          </Link>
+        )}
       </div>
       <GenericTable
         columns={columns}
