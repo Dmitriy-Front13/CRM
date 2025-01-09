@@ -3,7 +3,6 @@ import { encrypt } from "@/actions";
 import { Button } from "./ui/button";
 import { logOut } from "@/actions";
 import { POSITIONS } from "@/constants";
-
 const roleBasedPages = {
   [POSITIONS.HR_MANAGER]: [
     { href: "/projects", name: "Project list" },
