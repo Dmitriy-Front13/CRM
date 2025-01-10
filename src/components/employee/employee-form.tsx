@@ -297,7 +297,7 @@ export function EmployeeForm({
                   <FormItem>
                     <FormLabel>Projects</FormLabel>
                     <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 ">
-                      {projects.map(({ projectName: project }) => (
+                      { projects.map(({ projectName: project }) => (
                         <FormField
                           key={project}
                           control={form.control}

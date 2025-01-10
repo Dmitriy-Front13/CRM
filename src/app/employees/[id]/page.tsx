@@ -1,10 +1,11 @@
 import { EmployeeForm } from "@/components/employee/employee-form";
 
 import { getEmployeeById, getPeoplePartners } from "@/services/employees";
-import { getAllProjects } from "@/actions/projects/actions";
+import { getAllProjects, getProjectsByPM, getProjectsByEmployee } from "@/actions/projects/actions";
 import { encrypt } from "@/actions";
 import { POSITIONS } from "@/constants";
 import { redirect } from "next/navigation";
+import { Project } from "@prisma/client";
 
 export default async function EditEmployeePage({
   params,
@@ -12,11 +13,23 @@ export default async function EditEmployeePage({
   params: Promise<{ id: string }>;
 }) {
   const employeeId = (await params).id;
+  const user = await encrypt();
+  let projectPromise: Promise<Project[]>
+  switch (user!.position) {
+    case POSITIONS.PROJECT_MANAGER:
+      projectPromise = getProjectsByPM(user!.fullName)
+      break;
+    case POSITIONS.HR_MANAGER:
+      projectPromise = getProjectsByEmployee(employeeId)
+      break;
+    default:
+      projectPromise = getAllProjects()
+      break;
+  }
   const [projects, partners] = await Promise.all([
-    getAllProjects(),
+    projectPromise,
     getPeoplePartners(),
   ]);
-  const user = await encrypt();
   if (employeeId === "new") {
     if (user?.position === POSITIONS.PROJECT_MANAGER) redirect("/employees");
     return (
