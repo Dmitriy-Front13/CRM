@@ -34,12 +34,13 @@ import {
 import { POSITIONS, SUBDIVISIONS } from "@/constants";
 
 import { Checkbox } from "@/components/ui/checkbox";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
-import { AlertCircle } from 'lucide-react'
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { AlertCircle } from "lucide-react";
 
 import { createEmployee, updateEmployee } from "@/services/employees";
 import { Input } from "../ui/input";
 import { Employee, Project } from "@prisma/client";
+import { IUser } from "@/actions";
 
 const formSchema = z.object({
   fullName: z.string().min(2, {
@@ -61,17 +62,22 @@ export type EmployeeFormValues = z.infer<typeof formSchema>;
 
 export interface EmployeeWithProjects extends Employee {
   projects: string[];
-};
+}
 type EmployeeInfo = {
   projects: Project[];
-  partners: {fullName: string}[];
+  partners: { fullName: string }[];
 };
 interface EmployeeFormProps {
   employee?: EmployeeWithProjects;
   employeeInfo: EmployeeInfo;
+  user: IUser;
 }
 
-export function EmployeeForm({ employee, employeeInfo }: EmployeeFormProps) {
+export function EmployeeForm({
+  employee,
+  employeeInfo,
+  user,
+}: EmployeeFormProps) {
   const { projects, partners } = employeeInfo;
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -80,10 +86,16 @@ export function EmployeeForm({ employee, employeeInfo }: EmployeeFormProps) {
     password: employee?.password || "",
     status: employee?.status || "Inactive",
     subdivision: employee?.subdivision || "",
-    position: employee?.position || "",
+    position:
+      user.position === POSITIONS.HR_MANAGER
+        ? POSITIONS.EMPLOYEE
+        : employee?.position || "",
     projects: employee?.projects || [],
-    outOfOfficeBalance: employee?.outOfOfficeBalance || 0,
-    peoplePartner: employee?.peoplePartner || "",
+    outOfOfficeBalance: employee?.outOfOfficeBalance || 20,
+    peoplePartner:
+      user.position === POSITIONS.HR_MANAGER
+        ? user.fullName
+        : employee?.peoplePartner || "",
   };
   const form = useForm({
     resolver: zodResolver(formSchema),
@@ -94,7 +106,7 @@ export function EmployeeForm({ employee, employeeInfo }: EmployeeFormProps) {
   const onSubmit = async (data: EmployeeFormValues) => {
     try {
       setIsLoading(true);
-      setError(null)
+      setError(null);
       if (employee) {
         await updateEmployee(employee.id, data);
       } else {
@@ -104,9 +116,9 @@ export function EmployeeForm({ employee, employeeInfo }: EmployeeFormProps) {
     } catch (error) {
       if (error instanceof Error) {
         setError(error.message);
-    } else {
+      } else {
         setError("An unexpected error occurred. Please try again.");
-    }
+      }
     } finally {
       setIsLoading(false);
     }
@@ -121,7 +133,7 @@ export function EmployeeForm({ employee, employeeInfo }: EmployeeFormProps) {
             </CardTitle>
           </CardHeader>
           <CardContent>
-          {error && (
+            {error && (
               <Alert variant="destructive" className="mb-6">
                 <AlertCircle className="h-4 w-4" />
                 <AlertTitle>Error</AlertTitle>
@@ -137,12 +149,17 @@ export function EmployeeForm({ employee, employeeInfo }: EmployeeFormProps) {
                     <FormItem>
                       <FormLabel>Full Name</FormLabel>
                       <FormControl>
-                        <Input placeholder="Full Name" {...field} />
+                        <Input
+                          placeholder="Full Name"
+                          disabled={user.position === POSITIONS.PROJECT_MANAGER}
+                          {...field}
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
                   )}
                 />
+
                 <FormField
                   control={form.control}
                   name="password"
@@ -150,12 +167,17 @@ export function EmployeeForm({ employee, employeeInfo }: EmployeeFormProps) {
                     <FormItem>
                       <FormLabel>Password</FormLabel>
                       <FormControl>
-                        <Input placeholder="Password" {...field} />
+                        <Input
+                          placeholder="Password"
+                          disabled={user.position === POSITIONS.PROJECT_MANAGER}
+                          {...field}
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
                   )}
                 />
+
                 <FormField
                   control={form.control}
                   name="status"
@@ -169,6 +191,7 @@ export function EmployeeForm({ employee, employeeInfo }: EmployeeFormProps) {
                       </div>
                       <FormControl>
                         <Switch
+                          disabled={user.position === POSITIONS.PROJECT_MANAGER}
                           checked={field.value === "Active"}
                           onCheckedChange={(checked) =>
                             field.onChange(checked ? "Active" : "Inactive")
@@ -187,6 +210,7 @@ export function EmployeeForm({ employee, employeeInfo }: EmployeeFormProps) {
                     <FormItem>
                       <FormLabel>Subdivision</FormLabel>
                       <Select
+                        disabled={user.position === POSITIONS.PROJECT_MANAGER}
                         onValueChange={field.onChange}
                         defaultValue={field.value}
                       >
@@ -214,6 +238,7 @@ export function EmployeeForm({ employee, employeeInfo }: EmployeeFormProps) {
                     <FormItem>
                       <FormLabel>Position</FormLabel>
                       <Select
+                        disabled={user.position === POSITIONS.PROJECT_MANAGER}
                         onValueChange={field.onChange}
                         defaultValue={field.value}
                       >
@@ -223,11 +248,17 @@ export function EmployeeForm({ employee, employeeInfo }: EmployeeFormProps) {
                           </SelectTrigger>
                         </FormControl>
                         <SelectContent>
-                          {Object.values(POSITIONS).map((position) => (
-                            <SelectItem key={position} value={position}>
-                              {position}
+                          {user.position !== POSITIONS.ADMINISTRATOR ? (
+                            <SelectItem value={field.value}>
+                              {field.value}
                             </SelectItem>
-                          ))}
+                          ) : (
+                            Object.values(POSITIONS).map((position) => (
+                              <SelectItem key={position} value={position}>
+                                {position}
+                              </SelectItem>
+                            ))
+                          )}
                         </SelectContent>
                       </Select>
                       <FormMessage />
@@ -243,6 +274,7 @@ export function EmployeeForm({ employee, employeeInfo }: EmployeeFormProps) {
                       <FormLabel>Out of Office Balance</FormLabel>
                       <FormControl>
                         <Input
+                          disabled={user.position !== POSITIONS.ADMINISTRATOR}
                           type="number"
                           {...field}
                           onChange={(e) =>
@@ -278,6 +310,9 @@ export function EmployeeForm({ employee, employeeInfo }: EmployeeFormProps) {
                               >
                                 <FormControl>
                                   <Checkbox
+                                    disabled={
+                                      user.position === POSITIONS.HR_MANAGER
+                                    }
                                     checked={field.value?.includes(project)}
                                     onCheckedChange={(checked) => {
                                       return checked
@@ -312,18 +347,32 @@ export function EmployeeForm({ employee, employeeInfo }: EmployeeFormProps) {
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>People Partner</FormLabel>
-                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <Select
+                      disabled={user.position === POSITIONS.PROJECT_MANAGER}
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                    >
                       <FormControl>
                         <SelectTrigger>
                           <SelectValue placeholder="Select a People Partner" />
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        {partners.map((partner) => (
-                          <SelectItem key={partner.fullName} value={partner.fullName}>
-                            {partner.fullName}
+                        {user.position === POSITIONS.HR_MANAGER ||
+                        user.position === POSITIONS.PROJECT_MANAGER ? (
+                          <SelectItem value={field.value}>
+                            {field.value}
                           </SelectItem>
-                        ))}
+                        ) : (
+                          partners.map((partner) => (
+                            <SelectItem
+                              key={partner.fullName}
+                              value={partner.fullName}
+                            >
+                              {partner.fullName}
+                            </SelectItem>
+                          ))
+                        )}
                       </SelectContent>
                     </Select>
                     <FormMessage />
