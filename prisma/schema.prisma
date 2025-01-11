@@ -10,7 +10,7 @@ datasource db {
 model ApprovalRequest {
   id             Int          @id @default(autoincrement())
   approverID     Int
-  approver       Employee     @relation(fields: [approverID], references: [id])
+  approver       Employee?     @relation(fields: [approverID], references: [id])
   leaveRequestId Int          @unique
   leaveRequest   LeaveRequest @relation(fields: [leaveRequestId], references: [id])
   status         String

@@ -23,7 +23,7 @@ async function main() {
         fullName: 'John Doe',
         password: 'securepassword',
         subdivision: 'IT',
-        position: 'Developer',
+        position: 'Employee',
         status: 'Active',
         peoplePartner: 'Jane Smith',
         outOfOfficeBalance: 5,
@@ -32,7 +32,25 @@ async function main() {
         fullName: 'Alice Johnson',
         password: 'securepassword',
         subdivision: 'HR',
-        position: 'HR_MANAGER',
+        position: 'HR Manager',
+        status: 'Active',
+        peoplePartner: 'John Doe',
+        outOfOfficeBalance: 10,
+      },
+      {
+        fullName: 'Oleg Lanovoy',
+        password: '12345678',
+        subdivision: 'HR',
+        position: 'Administrator',
+        status: 'Active',
+        peoplePartner: 'John Doe',
+        outOfOfficeBalance: 10,
+      },
+      {
+        fullName: 'PM',
+        password: '12345678',
+        subdivision: 'IT',
+        position: 'Project Manager',
         status: 'Active',
         peoplePartner: 'John Doe',
         outOfOfficeBalance: 10,
@@ -48,7 +66,7 @@ async function main() {
         startDate: new Date('2023-01-01'),
         status: 'Active',
         projectName: 'CRM System',
-        projectManager: 'John Doe',
+        projectManager: 'PM',
       },
       {
         projectType: 'Software Development',
@@ -56,7 +74,7 @@ async function main() {
         endDate: new Date('2023-12-31'),
         status: 'Completed',
         projectName: 'E-commerce Platform',
-        projectManager: 'Alice Johnson',
+        projectManager: 'PM',
       },
     ],
   });
@@ -70,36 +88,17 @@ async function main() {
         startDate: new Date('2023-07-01'),
         endDate: new Date('2023-07-15'),
         status: 'Approved',
-        name: 'John Doe Vacation',
       },
       {
         employeeId: 2,
         absenceReason: 'Sick Leave',
         startDate: new Date('2023-08-01'),
         endDate: new Date('2023-08-05'),
-        status: 'Pending',
-        name: 'Alice Johnson Sick Leave',
+        status: 'Submitted',
       },
     ],
   });
 
-  // Сидинг запросов на утверждение
-  await prisma.approvalRequest.createMany({
-    data: [
-      {
-        approver: 'Jane Smith',
-        leaveRequest: 'John Doe Vacation',
-        status: 'Approved',
-        comment: 'Looks good!',
-      },
-      {
-        approver: 'John Doe',
-        leaveRequest: 'Alice Johnson Sick Leave',
-        status: 'Pending',
-        comment: null,
-      },
-    ],
-  });
 
   console.log('Seeding completed!');
 }
