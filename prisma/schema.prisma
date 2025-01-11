@@ -57,6 +57,6 @@ model Project {
   comment        String?
   status         String
   projectName    String
-  projectManager String?
+  projectManager String
   employees      Employee[]
 }
