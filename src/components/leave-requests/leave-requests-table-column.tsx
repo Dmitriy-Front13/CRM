@@ -12,6 +12,7 @@ import {
 import { MoreHorizontal } from "lucide-react";
 import { Button } from "../ui/button";
 import { formatDate } from "@/lib/utils";
+import { LEAVE_REQUEST_STATUS } from "@/constants";
 
 export const columns: ColumnDef<LeaveRequest>[] = [
   {
@@ -31,13 +32,13 @@ export const columns: ColumnDef<LeaveRequest>[] = [
       const status = getValue() as string;
       const getStatusStyle = (status: string) => {
         switch (status) {
-          case "SUBMITTED":
+          case LEAVE_REQUEST_STATUS.SUBMITTED:
             return "bg-blue-50 text-blue-700";
-          case "CANCELLED":
+          case LEAVE_REQUEST_STATUS.CANCELLED:
             return "bg-gray-100 text-gray-700";
-          case "APPROVED":
+          case LEAVE_REQUEST_STATUS.APPROVED:
             return "bg-green-50 text-green-700";
-          case "REJECTED":
+          case LEAVE_REQUEST_STATUS.REJECTED:
             return "bg-red-50 text-red-700";
           default:
             return "bg-gray-100 text-gray-700";

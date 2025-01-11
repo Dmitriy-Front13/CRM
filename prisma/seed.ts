@@ -20,12 +20,12 @@ async function main() {
   await prisma.employee.createMany({
     data: [
       {
-        fullName: 'John Doe',
-        password: 'securepassword',
+        fullName: 'Proger',
+        password: '12345678',
         subdivision: 'IT',
         position: 'Employee',
         status: 'Active',
-        peoplePartner: 'Jane Smith',
+        peoplePartner: 'Alice Johnson',
         outOfOfficeBalance: 5,
       },
       {
@@ -34,7 +34,6 @@ async function main() {
         subdivision: 'HR',
         position: 'HR Manager',
         status: 'Active',
-        peoplePartner: 'John Doe',
         outOfOfficeBalance: 10,
       },
       {
@@ -43,7 +42,6 @@ async function main() {
         subdivision: 'HR',
         position: 'Administrator',
         status: 'Active',
-        peoplePartner: 'John Doe',
         outOfOfficeBalance: 10,
       },
       {
@@ -52,7 +50,6 @@ async function main() {
         subdivision: 'IT',
         position: 'Project Manager',
         status: 'Active',
-        peoplePartner: 'John Doe',
         outOfOfficeBalance: 10,
       },
     ],
@@ -78,27 +75,6 @@ async function main() {
       },
     ],
   });
-
-  // Сидинг заявок на отпуск
-  await prisma.leaveRequest.createMany({
-    data: [
-      {
-        employeeName: "John Doe",
-        absenceReason: 'Vacation',
-        startDate: new Date('2023-07-01'),
-        endDate: new Date('2023-07-15'),
-        status: 'Approved',
-      },
-      {
-        employeeName: "John Doe",
-        absenceReason: 'Sick Leave',
-        startDate: new Date('2023-08-01'),
-        endDate: new Date('2023-08-05'),
-        status: 'Submitted',
-      },
-    ],
-  });
-
 
   console.log('Seeding completed!');
 }
