@@ -13,6 +13,36 @@ export const getAllProjects = async (): Promise<Project[]> => {
   }
 };
 
+export const getProjectsByPM = async (PM: string): Promise<Project[]> => {
+  try {
+    const projects = await prisma.project.findMany({
+      where: {
+        projectManager: PM
+      }
+    })
+    return projects
+  } catch (error) {
+    throw error
+  }
+}
+
+export const getProjectsByEmployee = async (employeeId: string): Promise<Project[]> => {
+  try {
+    const projects = await prisma.project.findMany({
+      where: {
+        employees: {
+          some: {
+            id: Number(employeeId)
+          }
+        }
+      }
+    })
+    return projects
+  } catch (error) {
+    throw error
+  }
+}
+
 export const getProjectById = async (id: number): Promise<Project> => {
   try {
     const project = await prisma.project.findUnique({
@@ -28,20 +58,20 @@ export const getProjectById = async (id: number): Promise<Project> => {
 }
 
 
-export const createProject = async (data: FormData ) => {
+export const createProject = async (data: FormData) => {
   try {
     await prisma.project.create({ data });
-  } catch (error) { 
+  } catch (error) {
     throw error
   }
 }
 
-export const updateProject = async (id: number, data: FormData ) => {
+export const updateProject = async (id: number, data: FormData) => {
   try {
     await prisma.project.update({
       where: { id },
       data: {
-        id : id,
+        id: id,
         ...data
       }
     })
