@@ -9,8 +9,8 @@ datasource db {
 
 model ApprovalRequest {
   id             Int          @id @default(autoincrement())
-  approverID     Int
-  approver       Employee?     @relation(fields: [approverID], references: [id])
+  approverName   String?
+  approver       Employee?     @relation(fields: [approverName], references: [fullName])
   leaveRequestId Int          @unique
   leaveRequest   LeaveRequest @relation(fields: [leaveRequestId], references: [id])
   status         String
@@ -29,7 +29,7 @@ model Employee {
   subdivision        String
   position           String
   status             EmployeeStatus
-  peoplePartner      String
+  peoplePartner      String?
   outOfOfficeBalance Int
   photo              String?
   leaveRequests      LeaveRequest[]
@@ -39,8 +39,8 @@ model Employee {
 
 model LeaveRequest {
   id              Int              @id @default(autoincrement())
-  employeeId      Int
-  employee        Employee         @relation(fields: [employeeId], references: [id])
+  employeeName    String
+  employee        Employee         @relation(fields: [employeeName], references: [fullName])
   approvalRequest ApprovalRequest?
   absenceReason   String
   startDate       DateTime
