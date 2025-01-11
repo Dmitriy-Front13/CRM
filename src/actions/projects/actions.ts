@@ -36,16 +36,17 @@ export const createProject = async (data: FormData ) => {
   }
 }
 
-export const updateProject = async (id: number, data: FormData ) => {
+export async function updateProject(id: number, body: Project) {
   try {
-    await prisma.project.update({
-      where: { id },
-      data: {
-        id : id,
-        ...data
-      }
+    const updatedProject = await prisma.project.update({
+      where: { id: Number(id) },
+      data: body
     })
+    return updatedProject; // Возвращаем обновленный проект
   } catch (error) {
-    throw error
+    throw new Error(`Error updating project: ${error}`);
   }
 }
+
+
+export type TUpdateProject = typeof updateProject;

@@ -36,8 +36,7 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { AlertCircle } from 'lucide-react';
 import { Project } from "@prisma/client";
 import { PROJECT_TYPES } from "@/constants";
-import { updateProject } from "@/actions";
-import { createProject } from "@/actions/projects/actions";
+import { createProject, updateProject } from "@/actions/projects/actions";
 
 const formSchema = z.object({
   projectName: z.string().min(2, {
