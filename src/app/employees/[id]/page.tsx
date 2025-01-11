@@ -5,7 +5,7 @@ import { getAllProjects, getProjectsByPM, getProjectsByEmployee } from "@/action
 import { POSITIONS } from "@/constants";
 import { redirect } from "next/navigation";
 import { Project } from "@prisma/client";
-import { encrypt } from "@/actions";
+import { encrypt } from "@/actions/auth/actions";
 
 export default async function EditEmployeePage({
   params,

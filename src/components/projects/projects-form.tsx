@@ -84,7 +84,7 @@ export function ProjectForm({ project, projectManager }: ProjectFormProps) {
       setIsLoading(true);
       setError(null);
       if (project) {
-        await updateProject(project.id, { ...data, id: project.id })
+        await await updateProject(project.id, { ...data })
       } else {
         await createProject(data);
       }
