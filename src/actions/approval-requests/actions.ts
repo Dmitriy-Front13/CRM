@@ -13,11 +13,36 @@ export const getAllApprovalRequests = async () => {
 export const getApprovalRequestsForHR = async (HR: string) => {
   try {
     const approvalRequests = await prisma.approvalRequest.findMany({
-      // where: { peoplePartner: HR },
+      where: {
+        leaveRequest: {
+          employee: {
+            peoplePartner: HR
+          }
+        }
+      },
     });
     return approvalRequests;
   } catch (error) {
     throw error;
   }
 };
-export const getApprovalRequestsForPM = async (PM: string) => {};
+export const getApprovalRequestsForPM = async (PM: string) => {
+  try {
+    const approvalRequests = await prisma.approvalRequest.findMany({
+      where: {
+        leaveRequest: {
+          employee: {
+            projects: {
+              some: {
+                projectManager: PM
+              }
+            }
+          }
+        }
+      },
+    });
+    return approvalRequests;
+  } catch (error) {
+    throw error;
+  }
+};

@@ -24,15 +24,16 @@ export const getAllLeaveRequests = async () => {
 
 export const createLeaveRequest = async (data: LeaveRequestFormData) => {
   try {
-    await prisma.leaveRequest.create({ 
+  
+    await prisma.leaveRequest.create({
       data: {
         ...data,
         approvalRequest: {
           create: {
-            status: "New"
+            status: "New",
           }
         }
-      } 
+      }
     });
   } catch (error) {
     throw error;

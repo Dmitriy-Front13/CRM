@@ -49,14 +49,15 @@ const formSchema = z.object({
   comment: z.string().nullable(),
   startDate: z.date(),
   endDate: z.date().nullable(),
-  projectManager: z.string().nullable()
+  projectManager: z.string()
 });
 
 export type FormData = z.infer<typeof formSchema>;
 interface ProjectFormProps {
   project?: Project;
+  projectManager: string
 }
-export function ProjectForm({ project }: ProjectFormProps) {
+export function ProjectForm({ project, projectManager }: ProjectFormProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -67,7 +68,7 @@ export function ProjectForm({ project }: ProjectFormProps) {
     comment: project?.comment || null,
     startDate: project?.startDate || new Date(),
     endDate: project?.endDate || null,
-    projectManager: project?.projectManager || null
+    projectManager: project?.projectManager || projectManager
   };
 
 
