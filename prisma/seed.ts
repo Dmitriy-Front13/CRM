@@ -83,14 +83,14 @@ async function main() {
   await prisma.leaveRequest.createMany({
     data: [
       {
-        employeeId: 1,
+        employeeName: "John Doe",
         absenceReason: 'Vacation',
         startDate: new Date('2023-07-01'),
         endDate: new Date('2023-07-15'),
         status: 'Approved',
       },
       {
-        employeeId: 2,
+        employeeName: "John Doe",
         absenceReason: 'Sick Leave',
         startDate: new Date('2023-08-01'),
         endDate: new Date('2023-08-05'),

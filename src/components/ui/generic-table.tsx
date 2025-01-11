@@ -24,7 +24,7 @@ import {
 
 import { TableFilters, TFilters } from "./table-filters";
 import { TUpdateEmployee } from "@/services/employees";
-import { TUpdateProject } from "@/actions";
+import { TUpdateProject } from "@/actions/projects/actions";
 
 declare module '@tanstack/react-table' {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -36,7 +36,7 @@ interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
   filters: TFilters
-  updateEntity: TUpdateEmployee | TUpdateProject
+  updateEntity?: TUpdateEmployee | TUpdateProject
 }
 
 export function GenericTable<TData, TValue>({
@@ -74,7 +74,7 @@ export function GenericTable<TData, TValue>({
           old.map((row, index) => index === rowIndex ? updatedEntity : row)
         );
         try {
-          await updateEntity(updatedEntity.id, updatedEntity);
+          await updateEntity!(updatedEntity.id, updatedEntity);
         } catch (error) {
           setData(oldData);
           console.error('Error updating employee:', error);

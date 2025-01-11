@@ -1,7 +1,6 @@
 "use client";
 import Link from "next/link";
-import { Project } from "@prisma/client";
-
+import { LeaveRequest } from "@prisma/client";
 import { ColumnDef } from "@tanstack/react-table";
 import { DataTableColumnHeader } from "../ui/column-header";
 import {
@@ -14,23 +13,11 @@ import { MoreHorizontal } from "lucide-react";
 import { Button } from "../ui/button";
 import { formatDate } from "@/lib/utils";
 
-export const columns: ColumnDef<Project>[] = [
+export const columns: ColumnDef<LeaveRequest>[] = [
   {
     accessorKey: "id",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="ID" />
-    ),
-  },
-  {
-    accessorKey: "projectName",
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Project Name" />
-    ),
-  },
-  {
-    accessorKey: "projectType",
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Project Type" />
     ),
   },
   {
@@ -42,24 +29,30 @@ export const columns: ColumnDef<Project>[] = [
     enableColumnFilter: true,
     cell: ({ getValue }) => {
       const status = getValue() as string;
+      const getStatusStyle = (status: string) => {
+        switch (status) {
+          case "SUBMITTED":
+            return "bg-blue-50 text-blue-700";
+          case "CANCELLED":
+            return "bg-gray-100 text-gray-700";
+          case "APPROVED":
+            return "bg-green-50 text-green-700";
+          case "REJECTED":
+            return "bg-red-50 text-red-700";
+          default:
+            return "bg-gray-100 text-gray-700";
+        }
+      };
       return (
         <span
-          className={`inline-flex items-center rounded-full px-2 py-1 text-xs font-medium ${
-            status === "Active"
-              ? "bg-green-50 text-green-700"
-              : "bg-gray-100 text-gray-700"
-          }`}
+          className={`inline-flex items-center rounded-full px-2 py-1 text-xs font-medium ${getStatusStyle(
+            status
+          )}`}
         >
           {status}
         </span>
       );
     },
-  },
-  {
-    accessorKey: "projectManager",
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Project Manager" />
-    ),
   },
   {
     accessorKey: "startDate",
@@ -77,9 +70,8 @@ export const columns: ColumnDef<Project>[] = [
   },
   {
     id: "actions",
-    cell: ({ row, table }) => {
-      const projectId = row.original.id;
-      const projectStatus = row.original.status;
+    cell: ({ row }) => {
+      const leaveRequestId = row.original.id;
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -89,23 +81,9 @@ export const columns: ColumnDef<Project>[] = [
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownMenuItem>
-              <Link href={`/projects/${projectId}`} className="w-full">
+              <Link href={`/employees/${leaveRequestId}`} className="w-full">
                 Edit
               </Link>
-            </DropdownMenuItem>
-            <DropdownMenuItem
-              className={
-                projectStatus === "Active" ? "text-red-600" : "text-green-500"
-              }
-              onClick={() => {
-                table.options.meta?.updateData(
-                  row.index,
-                  "status",
-                  projectStatus === "Active" ? "Completed" : "Active"
-                );
-              }}
-            >
-              {projectStatus === "Active" ? "Completed" : "Activate"}
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
