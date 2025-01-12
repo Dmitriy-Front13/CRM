@@ -2,8 +2,8 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import * as z from "zod";
 import Link from "next/link";
+import * as z from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
@@ -36,8 +36,7 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { AlertCircle } from 'lucide-react';
 import { Project } from "@prisma/client";
 import { PROJECT_TYPES } from "@/constants";
-import { updateProject } from "@/actions";
-import { createProject } from "@/actions/projects/actions";
+import { createProject, updateProject } from "@/actions/projects/actions";
 
 const formSchema = z.object({
   projectName: z.string().min(2, {
@@ -50,14 +49,15 @@ const formSchema = z.object({
   comment: z.string().nullable(),
   startDate: z.date(),
   endDate: z.date().nullable(),
-  projectManager: z.string().nullable()
+  projectManager: z.string()
 });
 
 export type FormData = z.infer<typeof formSchema>;
 interface ProjectFormProps {
   project?: Project;
+  projectManager: string
 }
-export function ProjectForm({ project }: ProjectFormProps) {
+export function ProjectForm({ project, projectManager }: ProjectFormProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -68,7 +68,7 @@ export function ProjectForm({ project }: ProjectFormProps) {
     comment: project?.comment || null,
     startDate: project?.startDate || new Date(),
     endDate: project?.endDate || null,
-    projectManager: project?.projectManager || null
+    projectManager: project?.projectManager || projectManager
   };
 
 
@@ -84,7 +84,7 @@ export function ProjectForm({ project }: ProjectFormProps) {
       setIsLoading(true);
       setError(null);
       if (project) {
-        await updateProject(project.id, { ...data, id: project.id })
+        await await updateProject(project.id, { ...data })
       } else {
         await createProject(data);
       }

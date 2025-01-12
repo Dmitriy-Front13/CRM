@@ -7,7 +7,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { logOut, IUser } from "@/actions";
+import { logOut, IUser } from "@/actions/auth/actions"; 
 interface LoggedInViewProps {
   user: IUser;
 }

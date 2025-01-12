@@ -76,6 +76,9 @@ export const updateProject = async (id: number, data: FormData) => {
       }
     })
   } catch (error) {
-    throw error
+    throw new Error(`Error updating project: ${error}`);
   }
 }
+
+
+export type TUpdateProject = typeof updateProject;

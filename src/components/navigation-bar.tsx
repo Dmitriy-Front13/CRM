@@ -1,7 +1,6 @@
 import Link from "next/link";
-import { encrypt } from "@/actions";
 import { Button } from "./ui/button";
-import { logOut } from "@/actions";
+import { logOut, encrypt } from "@/actions/auth/actions";
 import { POSITIONS } from "@/constants";
 const roleBasedPages = {
   [POSITIONS.HR_MANAGER]: [

@@ -1,15 +1,10 @@
 import { GenericTable } from "@/components/ui/generic-table";
 import { columns } from "@/components/employee/employee-table-column";
-import {
-  getAllEmployees,
-  getEmployeesForHR,
-  getEmployeesForPM,
-} from "@/services/employees";
-import { updateEmployee } from "@/actions";
+import { getAllEmployees, getEmployeesForHR, getEmployeesForPM, updateEmployee } from "@/actions/employees/actions";
 import { PlusIcon } from "lucide-react";
 import Link from "next/link";
 import { POSITIONS, STATUS_CHOICE, SUBDIVISIONS } from "@/constants";
-import { encrypt } from "@/actions";
+import { encrypt } from "@/actions/auth/actions";
 import { EmployeeWithProjects } from "@/components/employee/employee-form";
 import { redirect } from "next/navigation";
 

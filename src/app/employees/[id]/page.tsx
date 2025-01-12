@@ -1,11 +1,11 @@
 import { EmployeeForm } from "@/components/employee/employee-form";
 
-import { getEmployeeById, getPeoplePartners } from "@/services/employees";
+import { getEmployeeById, getPeoplePartners } from "@/actions/employees/actions";
 import { getAllProjects, getProjectsByPM, getProjectsByEmployee } from "@/actions/projects/actions";
-import { encrypt } from "@/actions";
 import { POSITIONS } from "@/constants";
 import { redirect } from "next/navigation";
 import { Project } from "@prisma/client";
+import { encrypt } from "@/actions/auth/actions";
 
 export default async function EditEmployeePage({
   params,

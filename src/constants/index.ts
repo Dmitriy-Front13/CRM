@@ -1,3 +1,4 @@
+
 export const POSITIONS = {
   HR_MANAGER: "HR Manager",
   PROJECT_MANAGER: "Project Manager",
@@ -30,4 +31,19 @@ export const STATUS_CHOICE = {
 export const PROJECT_STATUSES = {
   ACTIVE: "Active",
   COMPLETED: "Completed"
+} as const;
+
+export const LEAVE_REQUEST_STATUS = {
+  SUBMITTED: "Submitted",
+  CANCELLED: "Cancelled",
+  APPROVED: "Approved",
+  REJECTED: "Rejected"
+} as const;
+
+export const ABSENCE_REASON = {
+  SICK_LEAVE: "Sick Leave",
+  VACATION: "Vacation",
+  PERSONAL_LEAVE: "Personal Leave",
+  FAMILY_LEAVE: "Family Leave",
+  WORK_FROM_HOME: "Work from Home"
 } as const;
