@@ -21,12 +21,14 @@ interface DateRangePickerProps {
   control: any;  // eslint-disable-line @typescript-eslint/no-explicit-any
   startFieldName: string;
   endFieldName: string;
+  outOfOfficeBalance: number
 }
 
 export function DateRangePicker({
   control,
   startFieldName,
   endFieldName,
+  outOfOfficeBalance
 }: DateRangePickerProps) {
   const startDate = useController({
     name: startFieldName,
@@ -44,12 +46,9 @@ export function DateRangePicker({
   };
 
   const handleSelect = (range: DateRange | undefined) => {
-    if (range?.from) {
-      startDate.field.onChange(range.from);
-    }
-    if (range?.to) {
-      endDate.field.onChange(range.to);
-    }
+    console.log(range)
+    startDate.field.onChange(range?.from);
+    endDate.field.onChange(range?.to);
   };
 
   return (
@@ -83,11 +82,11 @@ export function DateRangePicker({
         <Calendar
           initialFocus
           mode="range"
-          defaultMonth={date.from}
+          max={outOfOfficeBalance}
           selected={date}
           onSelect={handleSelect}
-          numberOfMonths={2}
-          disabled={(date) => date < new Date()}
+          disabled={{ before: new Date() }}
+          modifiers={{ clickable: true }}
         />
       </PopoverContent>
     </Popover>

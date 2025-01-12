@@ -37,6 +37,7 @@ import { ABSENCE_REASON } from "@/constants";
 import { DateRangePicker } from "../ui/data-range-picker";
 interface LeaveRequestsFormProps {
   user: IUser;
+  outOfOfficeBalance: number;
 }
 const formSchema = z.object({
   employeeName: z.string(),
@@ -51,7 +52,7 @@ const formSchema = z.object({
 
 export type LeaveRequestFormData = z.infer<typeof formSchema>;
 
-export const LeaveRequestsForm = ({ user }: LeaveRequestsFormProps) => {
+export const LeaveRequestsForm = ({ user, outOfOfficeBalance }: LeaveRequestsFormProps) => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
@@ -136,6 +137,7 @@ export const LeaveRequestsForm = ({ user }: LeaveRequestsFormProps) => {
                   control={form.control}
                   startFieldName="startDate"
                   endFieldName="endDate"
+                  outOfOfficeBalance={outOfOfficeBalance}
                 />
                 <FormMessage>
                   {form.formState.errors.startDate?.message ||

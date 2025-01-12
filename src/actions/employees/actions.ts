@@ -16,6 +16,20 @@ export const getPeoplePartners = async (): Promise<{ fullName: string }[]> => {
   }
 };
 
+export const getOutOfBalanceEmployeeByName = async (employeeName: string) => {
+  try {
+    const employee = await prisma.employee.findFirst({
+      where: { fullName: employeeName },
+      select: {
+        outOfOfficeBalance: true
+      }
+    });
+    return employee!.outOfOfficeBalance;
+  } catch (error) {
+    throw error;
+  }
+}
+
 export const getAllEmployees = async (): Promise<EmployeeWithProjects[]> => {
   try {
     const employees = await prisma.employee.findMany({
