@@ -18,13 +18,12 @@ import { FormControl } from "@/components/ui/form";
 
 interface DateRangePickerProps {
   className?: string;
-  control: any;
+  control: any;  // eslint-disable-line @typescript-eslint/no-explicit-any
   startFieldName: string;
   endFieldName: string;
 }
 
 export function DateRangePicker({
-  className,
   control,
   startFieldName,
   endFieldName,

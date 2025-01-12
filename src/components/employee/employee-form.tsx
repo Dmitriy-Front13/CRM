@@ -40,7 +40,7 @@ import { AlertCircle } from "lucide-react";
 import { createEmployee, updateEmployee } from "@/services/employees";
 import { Input } from "../ui/input";
 import { Employee, Project } from "@prisma/client";
-import { IUser } from "@/actions";
+import { IUser } from "@/actions/auth/actions";
 
 const formSchema = z.object({
   fullName: z.string().min(2, {
