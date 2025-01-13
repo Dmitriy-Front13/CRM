@@ -1,4 +1,5 @@
 "use server";
+
 import { EmployeeFormValues, EmployeeWithProjects } from "@/components/employee/employee-form";
 import { POSITIONS } from "@/constants";
 import prisma from "@prisma/prisma";
@@ -15,6 +16,20 @@ export const getPeoplePartners = async (): Promise<{ fullName: string }[]> => {
     throw error;
   }
 };
+
+export const getOutOfBalanceEmployeeByName = async (employeeName: string) => {
+  try {
+    const employee = await prisma.employee.findFirst({
+      where: { fullName: employeeName },
+      select: {
+        outOfOfficeBalance: true
+      }
+    });
+    return employee!.outOfOfficeBalance;
+  } catch (error) {
+    throw error;
+  }
+}
 
 export const getAllEmployees = async (): Promise<EmployeeWithProjects[]> => {
   try {
