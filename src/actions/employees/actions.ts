@@ -1,4 +1,5 @@
-'use server'
+"use server";
+
 import { EmployeeFormValues, EmployeeWithProjects } from "@/components/employee/employee-form";
 import { POSITIONS } from "@/constants";
 import prisma from "@prisma/prisma";

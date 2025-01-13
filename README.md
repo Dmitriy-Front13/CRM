@@ -11,20 +11,34 @@ This project is a solution for managing employee leaves and absences within an o
   - Secure login system using predefined credentials.
 - **CRUD Operations for Employees**:
   - Create, update, and deactivate employees.
+- **Dedicated Leave Requests Page**:
+  - Employees can view and manage their leave requests.
+- **Projects Page**:
+  - Employees and managers can view relevant project details.
 
 ### Login Credentials:
-- **Username**: `Alice Johnson`  
-- **Password**: `securepassword`
+1. **Full Name**: `Proger`  
+   **Password**: `12345678`  
+   **Role**: Employee
+2. **Full Name**: `Alice Johnson`  
+   **Password**: `securepassword`  
+   **Role**: HR Manager
+3. **Full Name**: `Oleg Lanovoy`  
+   **Password**: `12345678`  
+   **Role**: Administrator
+4. **Full Name**: `PM`  
+   **Password**: `12345678`  
+   **Role**: Project Manager
 
 ## Core Functionality
 
 1. **HR Manager**:
-   - Full access to employee lists and approval requests.
+   - Full access to employee lists, leave requests, and approval requests.
    - Ability to add, update, and deactivate employees.
    - Approve or reject leave requests.
 
 2. **Project Manager**:
-   - Full access to project lists and approval requests.
+   - Full access to project lists, leave requests, and approval requests.
    - Assign employees to projects.
    - Approve or reject leave requests.
 
