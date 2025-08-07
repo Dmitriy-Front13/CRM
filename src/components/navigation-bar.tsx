@@ -28,7 +28,9 @@ const roleBasedPages = {
 };
 
 export const NavigationBar = async () => {
+  
   const user = await encrypt();
+  
   if (!user) return null;
   const pages = roleBasedPages[user.position] || [];
   return (
